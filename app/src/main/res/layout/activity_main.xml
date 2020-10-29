@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
      android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".WeatherInfoActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -15,14 +15,7 @@
         android:layout_gravity="center"
         android:visibility="gone"/>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="#FFFFFF"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+    <include layout="@layout/toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,7 +23,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/current_weather"
@@ -40,19 +34,21 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_clear_sun" />
+                android:src="@drawable/ic_clear_sun" />
 
             <LinearLayout
                 android:id="@+id/weather_day_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/current_temp">
+                app:layout_constraintTop_toBottomOf="@id/current_temp"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:paddingTop="8dp"
                     android:text="@string/weather_extra_info_title"
                     android:textAppearance="@style/SubtitleTextStyle" />
 
@@ -77,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:paddingTop="8dp"
                     android:text="@string/week_forecast_title"
                     android:textAppearance="@style/SubtitleTextStyle" />
 

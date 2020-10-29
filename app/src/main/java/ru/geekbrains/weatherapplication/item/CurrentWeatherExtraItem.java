@@ -1,12 +1,12 @@
-package ru.geekbrains.weatherapplication.data;
+package ru.geekbrains.weatherapplication.item;
 
 
-public class CurrentWeatherExtra {
+public class CurrentWeatherExtraItem {
     private int imgId;
     private String label;
     private String value;
 
-    public CurrentWeatherExtra(int imgId, String label, String value) {
+    public CurrentWeatherExtraItem(int imgId, String label, String value) {
         this.imgId = imgId;
         this.label = label;
         this.value = value;

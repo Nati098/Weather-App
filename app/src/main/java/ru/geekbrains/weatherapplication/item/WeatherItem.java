@@ -1,4 +1,4 @@
-package ru.geekbrains.weatherapplication.data;
+package ru.geekbrains.weatherapplication.item;
 
 public class WeatherItem {
     private int imgId;

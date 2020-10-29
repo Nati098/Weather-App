@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
-import ru.geekbrains.weatherapplication.data.WeatherItem;
+import ru.geekbrains.weatherapplication.item.WeatherItem;
 
 
 public class WeatherWeekAdapter extends RecyclerView.Adapter<WeatherWeekAdapter.WeatherWeekViewHolder> {
@@ -40,7 +40,7 @@ public class WeatherWeekAdapter extends RecyclerView.Adapter<WeatherWeekAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull WeatherWeekViewHolder holder, int position) {
-        holder.bind(context, data.get(0));
+        holder.bind(context, data.get(position));
     }
 
     @Override

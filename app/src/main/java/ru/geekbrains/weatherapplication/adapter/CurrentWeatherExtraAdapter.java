@@ -14,17 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
-import ru.geekbrains.weatherapplication.data.CurrentWeatherExtra;
+import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 
 
 public class CurrentWeatherExtraAdapter extends RecyclerView.Adapter<CurrentWeatherExtraAdapter.CurrentWeatherExtraViewHolder> {
 
     private Context context;
-    private List<CurrentWeatherExtra> data;
+    private List<CurrentWeatherExtraItem> data;
     private AdapterView.OnItemClickListener listener;
 
 
-    public CurrentWeatherExtraAdapter(Context context, List<CurrentWeatherExtra> data, AdapterView.OnItemClickListener listener) {
+    public CurrentWeatherExtraAdapter(Context context, List<CurrentWeatherExtraItem> data, AdapterView.OnItemClickListener listener) {
         this.context = context;
         this.data = data;
         this.listener = listener;
@@ -38,7 +38,7 @@ public class CurrentWeatherExtraAdapter extends RecyclerView.Adapter<CurrentWeat
 
     @Override
     public void onBindViewHolder(@NonNull CurrentWeatherExtraViewHolder holder, int position) {
-        holder.bind(context, data.get(0));
+        holder.bind(context, data.get(position));
     }
 
     @Override
@@ -48,7 +48,6 @@ public class CurrentWeatherExtraAdapter extends RecyclerView.Adapter<CurrentWeat
 
     public static class CurrentWeatherExtraViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView infoImg;
         public TextView label;
         public TextView value;
 
@@ -58,14 +57,12 @@ public class CurrentWeatherExtraAdapter extends RecyclerView.Adapter<CurrentWeat
             super(view);
             this.view = view;
 
-            infoImg = view.findViewById(R.id.info_img);
             label = view.findViewById(R.id.info_label);
             value = view.findViewById(R.id.info_value);
 
         }
 
-        public void bind(Context context, CurrentWeatherExtra item) {
-            infoImg.setImageResource(item.getImgId());
+        public void bind(Context context, CurrentWeatherExtraItem item) {
             label.setText(item.getLabel());
             value.setText(item.getValue());
 
