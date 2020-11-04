@@ -18,6 +18,11 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
 
+    <string name="see_forecast_step1">First, choose city:</string>
+    <string name="see_forecast_step2">Next, choose options you want to see:</string>
+    <string name="see_forecast_step3">And push the button to see the forecast:</string>
+    <string name="see_forecast_btn">See</string>
+
     <string name="temperature_dummy" translatable="false">7°C</string>
     <string name="time_dummy" translatable="false">12:00</string>
 </resources>

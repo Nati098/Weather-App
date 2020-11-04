@@ -1,15 +1,14 @@
 package ru.geekbrains.weatherapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 
 import java.util.ArrayList;
@@ -17,10 +16,10 @@ import java.util.List;
 
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
-import ru.geekbrains.weatherapplication.data.CurrentWeatherExtra;
-import ru.geekbrains.weatherapplication.data.WeatherItem;
+import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
+import ru.geekbrains.weatherapplication.item.WeatherItem;
 
-public class MainActivity extends AppCompatActivity {
+public class WeatherInfoActivity extends AppCompatActivity {
 
     private CurrentWeatherExtraAdapter extraInfoAdapter;
     private RecyclerView extraInfoRecycler;
@@ -31,26 +30,22 @@ public class MainActivity extends AppCompatActivity {
     private WeatherWeekAdapter weatherWeekAdapter;
     private RecyclerView weatherWeekRecycler;
 
-    private Toolbar toolbar;
-    private ImageView currentWeather;
-    private TextView currentTemp;
+    private ImageButton btnSettings;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_weather_info);
 
         bindView();
         setupRecycler();
     }
 
     private void bindView() {
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
 
-        currentWeather = findViewById(R.id.current_weather);
-        currentTemp = findViewById(R.id.current_temp);
+        btnSettings = findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener((view -> startActivity(new Intent(this, SettingsActivity.class))));
 
         weatherDayRecycler = findViewById(R.id.weather_day_recycler);
         weatherWeekRecycler = findViewById(R.id.weather_week_recycler);
@@ -90,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
-        weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public List<CurrentWeatherExtra> generateExtraInfoList() {
-        List<CurrentWeatherExtra> data = new ArrayList<>();
+    public List<CurrentWeatherExtraItem> generateExtraInfoList() {
+        List<CurrentWeatherExtraItem> data = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            data.add(new CurrentWeatherExtra(R.drawable.ic_temp_normal,
+            data.add(new CurrentWeatherExtraItem(R.drawable.ic_temp_normal,
                     String.format(getString(R.string.extra_item_label), i+1),
                     String.format("7%s", getString(R.string.temperature_unit))));
         }
