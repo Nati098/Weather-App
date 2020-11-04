@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Weather Application</string>
+
+    <string name="weather_description">Feels like</string>
+    <string name="weather_extra_info_title">Today\'s details</string>
+    <string name="extra_item_label">Extra item %d</string>
+
+    <string name="temperature">Temperature</string>
+    <string name="temperature_unit" translatable="false">°C</string>
+
+    <string name="week_forecast_title">Forecast for the next days</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="see_forecast_step1">First, choose city:</string>
+    <string name="see_forecast_step2">Next, choose options you want to see:</string>
+    <string name="see_forecast_step3">And push the button to see the forecast:</string>
+    <string name="see_forecast_btn">See</string>
+
+    <string name="temperature_dummy" translatable="false">7°C</string>
+    <string name="time_dummy" translatable="false">12:00</string>
 </resources>

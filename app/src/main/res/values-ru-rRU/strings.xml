@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погода</string>
+
+    <string name="weather_description">По ощущению</string>
+    <string name="weather_extra_info_title">Детали</string>
+    <string name="extra_item_label">Доп. информация %d</string>
+
+    <string name="temperature">Температура</string>
+
+    <string name="week_forecast_title">Прогоноз на след.дни</string>
+
+    <string name="monday">Пн</string>
+    <string name="tuesday">Вт</string>
+    <string name="wednesday">Ср</string>
+    <string name="thursday">Чт</string>
+    <string name="friday">Пт</string>
+    <string name="saturday">Сб</string>
+    <string name="sunday">Вс</string>
+
+</resources>
