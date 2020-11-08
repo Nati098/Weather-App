@@ -45,7 +45,7 @@ public class WeatherWeekAdapter extends RecyclerView.Adapter<WeatherWeekAdapter.
 
     @Override
     public int getItemCount() {
-        return 7;
+        return data.size();
     }
 
 

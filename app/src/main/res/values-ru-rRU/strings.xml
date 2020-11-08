@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Погода</string>
+    <string name="weather_info_title">Погода в г.%1$s</string>
 
     <string name="weather_description">По ощущению</string>
     <string name="weather_extra_info_title">Детали</string>

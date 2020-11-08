@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
+import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
 
@@ -48,6 +50,10 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsV
         return data.size();
     }
 
+    public List<OptionItem> getData() {
+        return data;
+    }
+
     public class OptionsViewHolder extends RecyclerView.ViewHolder {
 
         public TextView label;
@@ -67,7 +73,10 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsV
             Log.v("OptionsAdapter", "item isActive "+ item.isActive());
             label.setText(item.getLabel());
             activateOptionCheckBox.setChecked(item.isActive());
-
+            activateOptionCheckBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                item.setActive(isChecked);
+                SystemPreferences.setPreference(item.getId(), isChecked);
+            });
         }
     }
 }
