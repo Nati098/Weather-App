@@ -12,4 +12,9 @@ public class Constants {
 
     public static final List<OptionItem> settings = Arrays.asList(new OptionItem(IS_NIGHT_MODE, "Night Mode", false));
 
+    public static class LoggerMode {
+        public static boolean VERBOSE = true;
+        public static boolean DEBUG = VERBOSE && true;
+    }
+
 }

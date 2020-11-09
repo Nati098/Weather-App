@@ -20,6 +20,8 @@ import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
+import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
+
 
 public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsViewHolder> {
 
@@ -70,7 +72,9 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsV
         }
 
         public void bind(Context context, OptionItem item) {
-            Log.v("OptionsAdapter", "item isActive "+ item.isActive());
+            if (DEBUG) {
+                Log.d("OptionsAdapter", "item isActive " + item.isActive());
+            }
             label.setText(item.getLabel());
             activateOptionCheckBox.setChecked(item.isActive());
             activateOptionCheckBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {

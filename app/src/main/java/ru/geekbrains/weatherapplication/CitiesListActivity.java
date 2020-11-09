@@ -21,6 +21,7 @@ import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
+import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
@@ -74,7 +75,9 @@ public class CitiesListActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btn_settings);
         btnSettings.setOnClickListener((view -> startActivity(new Intent(this, SettingsActivity.class))));
 
-        Log.d("CitiesListActivity","editTextCityName isEmpty():"+ !editTextCityName.getText().toString().isEmpty());
+        if (DEBUG) {
+            Log.d("CitiesListActivity", "editTextCityName isEmpty():" + !editTextCityName.getText().toString().isEmpty());
+        }
         btnSeeWeather = findViewById(R.id.btn_see_weather);
         btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener((v) -> {
@@ -101,7 +104,9 @@ public class CitiesListActivity extends AppCompatActivity {
         List<OptionItem> data = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             data.add(new OptionItem("item_"+ i, String.format(getString(R.string.extra_item_label), i+1), i%2==0));
-            Log.v("CitiesListActivity", "item #"+ i + " - " + (i%2==0));
+            if (DEBUG) {
+                Log.d("CitiesListActivity", "item #" + i + " - " + (i % 2 == 0));
+            }
         }
         return data;
     }

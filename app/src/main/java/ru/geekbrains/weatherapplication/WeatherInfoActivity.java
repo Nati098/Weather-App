@@ -23,6 +23,7 @@ import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
 
+import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
@@ -55,7 +56,9 @@ public class WeatherInfoActivity extends AppCompatActivity {
         setupRecycler(parcel.options);
 
         String title = getString(R.string.weather_info_title, parcel.cityName);
-        Log.d("WeatherInfoActivity", "title = "+title);
+        if (DEBUG) {
+            Log.d("WeatherInfoActivity", "title = " + title);
+        }
         toolbarTitle.setText(title);
     }
 
