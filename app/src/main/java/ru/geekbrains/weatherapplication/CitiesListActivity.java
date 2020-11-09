@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,11 +48,35 @@ public class CitiesListActivity extends AppCompatActivity {
 
     private void bindView() {
         editTextCityName = findViewById(R.id.city_name_edittext);
+        editTextCityName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length() != 0) {
+                    btnSeeWeather.setEnabled(true);
+                }
+
+                else {
+                    btnSeeWeather.setEnabled(false);
+                }
+            }
+        });
 
         btnSettings = findViewById(R.id.btn_settings);
         btnSettings.setOnClickListener((view -> startActivity(new Intent(this, SettingsActivity.class))));
 
+        Log.d("CitiesListActivity","editTextCityName isEmpty():"+ !editTextCityName.getText().toString().isEmpty());
         btnSeeWeather = findViewById(R.id.btn_see_weather);
+        btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener((v) -> {
             Parcel parcel = new Parcel();
             parcel.cityName = editTextCityName.getText().toString();

@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text|textNoSuggestions|textCapWords"
                 android:textAppearance="@style/RegularTextStyle"
+                android:textColor="@null"
                 />
 
             <TextView

@@ -1,6 +1,8 @@
 package ru.geekbrains.weatherapplication.item;
 
-public class OptionItem {
+import java.io.Serializable;
+
+public class OptionItem implements Serializable {
     private String id = "";
     private String label;
     private boolean isActive;

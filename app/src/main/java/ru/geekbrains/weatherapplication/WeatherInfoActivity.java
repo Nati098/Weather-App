@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
 public class WeatherInfoActivity extends AppCompatActivity {
+    private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
 
     private TextView toolbarTitle;
 
@@ -38,6 +41,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
     private RecyclerView weatherWeekRecycler;
 
     private ImageButton btnSettings;
+    private Button btnMoreInfo;
 
 
     @Override
@@ -67,6 +71,15 @@ public class WeatherInfoActivity extends AppCompatActivity {
         extraInfoRecycler = findViewById(R.id.extra_info_recycler);
         weatherWeekRecycler = findViewById(R.id.weather_week_recycler);
 
+        btnMoreInfo = findViewById(R.id.btn_more_info);
+        btnMoreInfo.setOnClickListener(view -> {
+            Uri uri = Uri.parse(ADDRESS_WEATHER);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupRecycler(List<OptionItem> options) {
