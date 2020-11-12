@@ -8,6 +8,7 @@ public class OptionItem implements Serializable {
     private boolean isActive;
 
     public OptionItem(String id, String label, boolean isActive) {
+        this.id = id;
         this.label = label;
         this.isActive = isActive;
     }
