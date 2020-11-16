@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -123,16 +124,19 @@ public class WeatherInfoFragment extends Fragment {
         extraInfoRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
 
+        weatherDayRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         weatherDayAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_day_item_list,
                 generateWeatherDayList(), (adapterView, v, i, l) -> { });
         weatherDayRecycler.setAdapter(weatherDayAdapter);
-        weatherDayRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
+        weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(view.getContext().getDrawable(R.drawable.weather_week_separator));
+        weatherWeekRecycler.addItemDecoration(itemDecoration);
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
                 generateWeatherWeekList(), (adapterView, v, i, l) -> { });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
-        weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 
     public List<CurrentWeatherExtraItem> generateExtraInfoList(List<OptionItem> options) {
