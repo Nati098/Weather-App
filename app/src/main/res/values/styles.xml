@@ -3,8 +3,8 @@
     <style name="AppCustomLightTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#3F51B5</item>
-        <item name="android:textColorSecondary">#000000</item>
         <item name="colorAccent">#00BCD4</item>
+        <item name="android:textColorSecondary">#000000</item>
         <item name="android:windowBackground">#F4F4F6</item>
         <item name="android:fillColor">#000000</item>
         <item name="toolbarIconColor">@color/toolbarIconLight</item>
@@ -41,7 +41,7 @@
     </style>
 
     <!-- Text format for extra info -->
-    <style name="ExtraInfoTextStyle">
+    <style name="RegularTextStyle">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>

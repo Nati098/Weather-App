@@ -43,7 +43,7 @@ public class CurrentWeatherExtraAdapter extends RecyclerView.Adapter<CurrentWeat
 
     @Override
     public int getItemCount() {
-        return 5;
+        return data.size();
     }
 
     public static class CurrentWeatherExtraViewHolder extends RecyclerView.ViewHolder {

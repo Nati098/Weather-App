@@ -1,13 +1,20 @@
 package ru.geekbrains.weatherapplication.item;
 
-public class OptionItem {
+import java.io.Serializable;
+
+public class OptionItem implements Serializable {
+    private String id = "";
     private String label;
     private boolean isActive;
 
-
-    public OptionItem(String label, boolean isActive) {
+    public OptionItem(String id, String label, boolean isActive) {
+        this.id = id;
         this.label = label;
         this.isActive = isActive;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getLabel() {
@@ -16,5 +23,9 @@ public class OptionItem {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

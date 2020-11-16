@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 
-import static ru.geekbrains.weatherapplication.data.SettingsList.settings;
+import static ru.geekbrains.weatherapplication.data.Constants.settings;
 
 
 public class SettingsActivity extends AppCompatActivity {
