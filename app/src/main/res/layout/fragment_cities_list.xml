@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="?attr/backgroundImage"
-    tools:context=".WeatherInfoActivity">
-
-    <include layout="@layout/toolbar"/>
+    android:background="?attr/backgroundImage">
 
     <ProgressBar
         android:id="@+id/progressBar"

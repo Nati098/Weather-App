@@ -10,7 +10,7 @@ import static ru.geekbrains.weatherapplication.data.SystemPreferences.IS_NIGHT_M
 public class Constants {
     public static final String WEATHER_OPTIONS = "weather_options";
 
-    public static final List<OptionItem> settings = Arrays.asList(new OptionItem(IS_NIGHT_MODE, "Night Mode", false));
+    public static final List<OptionItem> settings = Arrays.asList(new OptionItem(IS_NIGHT_MODE, "Night Mode", SystemPreferences.getBooleanPreference(IS_NIGHT_MODE)));
 
     public static class LoggerMode {
         public static boolean VERBOSE = true;

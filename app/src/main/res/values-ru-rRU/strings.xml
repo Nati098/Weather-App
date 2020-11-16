@@ -25,4 +25,6 @@
     <string name="see_forecast_step2">Далее выберите, какую информацию отображать:</string>
     <string name="see_forecast_step3">А теперь нажмите кнопку, чтобы посмотреть прогноз:</string>
     <string name="see_forecast_btn">Посмотреть</string>
+
+    <string name="cannot_load_info_error">Не удается загрузить информацию</string>
 </resources>
