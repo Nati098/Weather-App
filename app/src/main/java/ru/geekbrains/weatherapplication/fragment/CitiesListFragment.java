@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -104,12 +105,22 @@ public class CitiesListFragment extends Fragment {
 
     private void bindView(View view) {
         editTextCityName = view.findViewById(R.id.city_name_edittext);
-        editTextCityName.setOnFocusChangeListener((textView, hasFocus) -> {
-            if (hasFocus) {
-                return;
+        editTextCityName.setFocusable(true);
+        editTextCityName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
-            TextView tv = (TextView) textView;
-            validate(tv, getResources().getString(R.string.empty_city_name_error));
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                validate((TextView) editTextCityName, getResources().getString(R.string.empty_city_name_error));
+            }
         });
 
         if (DEBUG) {
@@ -137,10 +148,10 @@ public class CitiesListFragment extends Fragment {
         String value = view.getText().toString();
 
         if (value.isEmpty()) {
-            view.setError(null);
+            view.setError(message);
             btnSeeWeather.setEnabled(false);
         } else {
-            view.setError(message);
+            view.setError(null);
             btnSeeWeather.setEnabled(true);
         }
     }

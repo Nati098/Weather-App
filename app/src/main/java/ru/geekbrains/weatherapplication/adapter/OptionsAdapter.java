@@ -81,9 +81,6 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsV
             activateOptionCheckBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 item.setActive(isChecked);
                 SystemPreferences.setPreference(item.getId(), isChecked);
-                if (context instanceof SettingsActivity) {
-                    ((SettingsActivity) context).recreate();
-                }
             });
         }
     }
