@@ -16,12 +16,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        if (SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE)) {
-            setTheme(R.style.AppCustomDarkTheme);
-        }
-        else {
-            setTheme(R.style.AppCustomLightTheme);
-        }
         bindView();
     }
 

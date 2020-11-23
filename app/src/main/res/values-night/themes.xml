@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+    <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="colorPrimary">#1B2137</item>
+        <item name="colorPrimaryDark">#131625</item>
+        <item name="toolbarIconColor">@color/toolbarIconLight</item>
+        <item name="android:textColorSecondary">#FFFFFF</item>
+    </style>
 
 </resources>

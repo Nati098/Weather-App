@@ -22,9 +22,9 @@
         <item name="android:textColorSecondary">#FFFFFF</item>
         <item name="android:windowBackground">#33343B</item>
         <item name="android:fillColor">#FFFFFF</item>
-        <item name="toolbarIconColor">@color/toolbarIconDark</item>
+        <item name="toolbarIconColor">@color/toolbarIconLight</item>
         <item name="backgroundImage">@drawable/background_dark</item>
-        <item name="backgroundRecyclerColor">#000000</item>
+        <item name="backgroundRecyclerColor">#1B2137</item>
     </style>
 
 </resources>

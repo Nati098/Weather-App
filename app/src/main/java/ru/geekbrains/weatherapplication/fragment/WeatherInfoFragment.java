@@ -103,9 +103,7 @@ public class WeatherInfoFragment extends Fragment {
 
         weatherDayRecycler = view.findViewById(R.id.weather_day_recycler);
         weatherWeekRecycler = view.findViewById(R.id.weather_week_recycler);
-
         extraInfoRecycler = view.findViewById(R.id.extra_info_recycler);
-        weatherWeekRecycler = view.findViewById(R.id.weather_week_recycler);
 
         btnMoreInfo = view.findViewById(R.id.btn_more_info);
         btnMoreInfo.setOnClickListener(v -> {
@@ -131,9 +129,6 @@ public class WeatherInfoFragment extends Fragment {
 
 
         weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL);
-        itemDecoration.setDrawable(view.getContext().getDrawable(R.drawable.weather_week_separator));
-        weatherWeekRecycler.addItemDecoration(itemDecoration);
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
                 generateWeatherWeekList(), (adapterView, v, i, l) -> { });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
