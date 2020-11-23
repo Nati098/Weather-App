@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/temperature"
-        android:textAppearance="@style/SubtitleTextStyle" />
+        style="@style/SubtitleTextStyle" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/activate_option_checkbox"

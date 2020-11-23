@@ -18,20 +18,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sunday"
-            android:textAppearance="@style/SubtitleTextStyle" />
+            style="@style/SubtitleTextStyle" />
 
         <ImageView
             android:id="@+id/weather_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_cloudy"/>
+            android:src="@drawable/ic_cloudy"
+            app:tint="?android:textColorSecondary" />
 
         <TextView
             android:id="@+id/temperature_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/temperature_dummy"
-            android:textAppearance="@style/RegularTextStyle"/>
+            style="@style/RegularTextStyle"/>
 
 </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -8,7 +8,7 @@
     android:layout_height="@dimen/toolbar_height"
     android:padding="8dp"
     android:background="?attr/colorPrimary"
-    app:titleTextAppearance="@style/TitleTextStyle"
+    style="@style/TitleTextStyle"
     android:minHeight="?attr/actionBarSize">
 
     <androidx.constraintlayout.widget.ConstraintLayout

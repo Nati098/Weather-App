@@ -6,7 +6,7 @@
     android:layout_margin="8dp"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="?attr/backgroundRecyclerColor">
+    android:background="?backgroundRecyclerColor">
 
     <ImageView
         android:id="@+id/weather_img"

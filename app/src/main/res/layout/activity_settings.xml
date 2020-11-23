@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textAppearance="@style/RegularTextStyle"
+        style="@style/RegularTextStyle"
         android:text="@string/setting_night_mode" />
 
 

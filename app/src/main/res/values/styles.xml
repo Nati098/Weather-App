@@ -8,11 +8,13 @@
     <!-- Text format for subtitles -->
     <style name="SubtitleTextStyle">
         <item name="android:textSize">20sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
     <!-- Text format for the main info -->
     <style name="InfoTextStyle">
         <item name="android:textSize">28sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
     <!-- Text format for extra info -->
