@@ -26,5 +26,7 @@
     <string name="see_forecast_step3">А теперь нажмите кнопку, чтобы посмотреть прогноз:</string>
     <string name="see_forecast_btn">Посмотреть</string>
 
+    <string name="setting_night_mode">Темная тема</string>
+
     <string name="cannot_load_info_error">Не удается загрузить информацию</string>
 </resources>

@@ -1,5 +1,6 @@
 package ru.geekbrains.weatherapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +24,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 
 public class BaseAppActivity extends AppCompatActivity implements OpenFragmentListener {
+    private static final int SETTINGS_CODE = 88;
 
     private static Context context;
 
@@ -41,11 +43,18 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         }
 
         ImageButton btnSettings = findViewById(R.id.btn_settings);
-        btnSettings.setOnClickListener((v -> startActivity(new Intent(getApplicationContext(), SettingsActivity.class))));
+        btnSettings.setOnClickListener((v -> startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE)));
 
         openFragment(CitiesListFragment.newInstance("", generateOptionsList()));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SETTINGS_CODE) {
+            recreate();
+        }
+    }
 
     public static Context getContext() {
         return context;

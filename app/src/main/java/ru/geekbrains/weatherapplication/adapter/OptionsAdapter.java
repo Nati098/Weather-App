@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
+import ru.geekbrains.weatherapplication.SettingsActivity;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
@@ -80,6 +81,9 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.OptionsV
             activateOptionCheckBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 item.setActive(isChecked);
                 SystemPreferences.setPreference(item.getId(), isChecked);
+                if (context instanceof SettingsActivity) {
+                    ((SettingsActivity) context).recreate();
+                }
             });
         }
     }

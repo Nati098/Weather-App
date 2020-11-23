@@ -26,6 +26,8 @@
     <string name="see_forecast_step3">And push the button to see the forecast:</string>
     <string name="see_forecast_btn">See</string>
 
+    <string name="setting_night_mode">Night mode</string>
+
     <string name="cannot_load_info_error">Cannot load information</string>
 
     <string name="temperature_dummy" translatable="false">7°C</string>

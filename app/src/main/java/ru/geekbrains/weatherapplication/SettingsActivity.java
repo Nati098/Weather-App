@@ -1,38 +1,37 @@
 package ru.geekbrains.weatherapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.os.Bundle;
 
-import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
-
-import static ru.geekbrains.weatherapplication.data.Constants.settings;
+import ru.geekbrains.weatherapplication.data.SystemPreferences;
 
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private OptionsAdapter optionsAdapter;
-    private RecyclerView optionsRecycler;
-
+    SwitchCompat switchNightMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        if (SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE)) {
+            setTheme(R.style.AppCustomDarkTheme);
+        }
+        else {
+            setTheme(R.style.AppCustomLightTheme);
+        }
         bindView();
-        setupRecycler();
     }
 
     private void bindView() {
-        optionsRecycler = findViewById(R.id.recycler);
+        switchNightMode = findViewById(R.id.switch_night_mode);
+        switchNightMode.setChecked(SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE));
+        switchNightMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SystemPreferences.setPreference(SystemPreferences.IS_NIGHT_MODE, isChecked);
+            this.recreate();
+        });
     }
 
-    private void setupRecycler() {
-        optionsAdapter = new OptionsAdapter(this, settings, (adapterView, view, i, l) -> { });
-        optionsRecycler.setAdapter(optionsAdapter);
-        optionsRecycler.setLayoutManager(new LinearLayoutManager(this));
-    }
 }

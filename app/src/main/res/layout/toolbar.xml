@@ -9,8 +9,7 @@
     android:padding="8dp"
     android:background="?attr/colorPrimary"
     app:titleTextColor="#FFFFFF"
-    android:minHeight="?attr/actionBarSize"
-    android:theme="?attr/actionBarTheme" >
+    android:minHeight="?attr/actionBarSize">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
