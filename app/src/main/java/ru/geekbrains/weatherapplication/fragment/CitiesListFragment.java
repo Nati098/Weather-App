@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
@@ -102,26 +104,12 @@ public class CitiesListFragment extends Fragment {
 
     private void bindView(View view) {
         editTextCityName = view.findViewById(R.id.city_name_edittext);
-        editTextCityName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        editTextCityName.setOnFocusChangeListener((textView, hasFocus) -> {
+            if (hasFocus) {
+                return;
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(editable.length() != 0) {
-                    btnSeeWeather.setEnabled(true);
-                }
-                else {
-                    btnSeeWeather.setEnabled(false);
-                }
-            }
+            TextView tv = (TextView) textView;
+            validate(tv, getResources().getString(R.string.empty_city_name_error));
         });
 
         if (DEBUG) {
@@ -130,7 +118,10 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather = view.findViewById(R.id.btn_see_weather);
         btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener(v -> {
-            openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
+            Snackbar.make(view.findViewById(R.id.cities_list_fragment),
+                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes,
+                        view1 -> openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData())))
+                    .show();
         });
 
         optionsRecycler = view.findViewById(R.id.recycler);
@@ -140,6 +131,18 @@ public class CitiesListFragment extends Fragment {
         optionsAdapter = new OptionsAdapter(view.getContext(), data, (adapterView, v, i, l) -> { });
         optionsRecycler.setAdapter(optionsAdapter);
         optionsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
+
+    private void validate(TextView view, String message) {
+        String value = view.getText().toString();
+
+        if (value.isEmpty()) {
+            view.setError(null);
+            btnSeeWeather.setEnabled(false);
+        } else {
+            view.setError(message);
+            btnSeeWeather.setEnabled(true);
+        }
     }
 
 //    private void showExtraInfoFragment() {

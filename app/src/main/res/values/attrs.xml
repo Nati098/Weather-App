@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="toolbarIconColor" format="reference" />
+    <attr name="toolbarIconColor" format="color" />
     <attr name="backgroundImage" format="integer"/>
     <attr name="backgroundRecyclerColor" format="color"/>
 </resources>
