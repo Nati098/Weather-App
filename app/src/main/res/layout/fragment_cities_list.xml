@@ -84,6 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:theme="@style/CustomTextButtonTheme"
                     android:text="@string/see_forecast_btn"/>
             </LinearLayout>
         </LinearLayout>
