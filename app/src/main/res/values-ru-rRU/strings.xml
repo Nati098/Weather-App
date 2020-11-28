@@ -5,6 +5,7 @@
     <string name="city_name_hint">Название города</string>
     <string name="show_forecast_confirm">Вы уверены?</string>
     <string name="show_forecast_yes">Вперед</string>
+    <string name="button_ok">ОК</string>
 
     <string name="weather_info_title">Погода в г.%1$s</string>
 

@@ -4,6 +4,7 @@
     <string name="city_name_hint">City name</string>
     <string name="show_forecast_confirm">Are you sure?</string>
     <string name="show_forecast_yes">Go</string>
+    <string name="button_ok">OK</string>
 
     <string name="weather_info_title">%1$s\'s weather</string>
 

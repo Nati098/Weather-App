@@ -11,19 +11,17 @@ import ru.geekbrains.weatherapplication.item.OptionItem;
 import static ru.geekbrains.weatherapplication.data.SystemPreferences.IS_NIGHT_MODE;
 
 public class Constants {
+    public static final String API_KEY = "d58a8ddd18dd1ab39049edc96fac7f39";
+    public static final String GET_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?";
+
     public static final String WEATHER_OPTIONS = "weather_options";
 
     public static final String SUNRISE_TIME_OPTION = "sunrise_time_option";
     public static final String SUNSET_TIME_OPTION = "sunset_time_option";
     public static final String TEMPERATURE_OPTION = "temperature_options";
     public static final String ATM_PRESSURE_OPTION = "atm_pressure_options";
+    public static final String WIND_OPTION = "atm_pressure_options";
     public static final String HUMIDITY_OPTION = "humidity_options";
-
-    public static final List<OptionItem> weather_extra_info = Arrays.asList(new OptionItem(SUNRISE_TIME_OPTION, Resources.getSystem().getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
-                                                                            new OptionItem(SUNSET_TIME_OPTION, Resources.getSystem().getString(R.string.sunset_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
-                                                                            new OptionItem(TEMPERATURE_OPTION, Resources.getSystem().getString(R.string.temp_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
-                                                                            new OptionItem(ATM_PRESSURE_OPTION, Resources.getSystem().getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
-                                                                            new OptionItem(HUMIDITY_OPTION, Resources.getSystem().getString(R.string.humidity_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)));
 
     public static final List<OptionItem> settings = Arrays.asList(new OptionItem(IS_NIGHT_MODE, Resources.getSystem().getString(R.string.setting_night_mode), SystemPreferences.getBooleanPreference(IS_NIGHT_MODE)));
 

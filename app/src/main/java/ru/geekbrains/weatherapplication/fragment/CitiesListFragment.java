@@ -1,7 +1,9 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,20 +21,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
+import ru.geekbrains.weatherapplication.data.State;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
+import static ru.geekbrains.weatherapplication.data.Constants.API_KEY;
+import static ru.geekbrains.weatherapplication.data.Constants.GET_WEATHER_URL;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
 public class CitiesListFragment extends Fragment {
+    private static final String TAG = CitiesListFragment.class.getSimpleName();
+
+    View mainFragment;
+    private View viewLoading;
+    private View viewError;
+    TextView textViewError;
 
     private TextInputEditText editTextCityName;
     private Button btnSeeWeather;
@@ -41,7 +62,6 @@ public class CitiesListFragment extends Fragment {
     private RecyclerView optionsRecycler;
 
     private OpenFragmentListener openFragmentListener;
-//    private boolean isExtraInfo;  // if we can draw 2nd fragment on that screen
 
 
     public static CitiesListFragment newInstance(String cityName, List<OptionItem> data) {
@@ -84,10 +104,6 @@ public class CitiesListFragment extends Fragment {
         editTextCityName.setText(parcel.cityName);
         setupRecycler(view, parcel.options);
 
-//        isExtraInfo = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-//        if (isExtraInfo) {
-//            showExtraInfoFragment();
-//        }
     }
 
     @Override
@@ -102,6 +118,11 @@ public class CitiesListFragment extends Fragment {
 
 
     private void bindView(View view) {
+        mainFragment = view.findViewById(R.id.weather_day_info);
+        viewLoading = view.findViewById(R.id.frame_loading);
+        viewError = view.findViewById(R.id.frame_error);
+        textViewError = view.findViewById(R.id.text_view_error);
+
         editTextCityName = view.findViewById(R.id.city_name_edittext);
         editTextCityName.setFocusable(true);
         editTextCityName.addTextChangedListener(new TextWatcher() {
@@ -128,9 +149,7 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
-                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes,
-                        view1 -> openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData())))
-                    .show();
+                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> loadWeatherData()).show();
         });
 
         optionsRecycler = view.findViewById(R.id.recycler);
@@ -154,12 +173,109 @@ public class CitiesListFragment extends Fragment {
         }
     }
 
-//    private void showExtraInfoFragment() {
-//        if (isExtraInfo && editTextCityName.getText() != null && !editTextCityName.getText().toString().isEmpty()) {
-//            openFragmentListener.openFragment(R.id.fragment_extra_info,
-//                    WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
-//        }
-//
-//    }
+    private void loadWeatherData(){
+        showStateView(State.Loading);
+
+        getWeather(-999.0f, 37.62f);  //55.75
+    }
+
+    private void getWeather(float lat, float lon) {
+        StringBuilder requestUrl = new StringBuilder(GET_WEATHER_URL);
+
+        requestUrl.append("lat=").append(lat)
+                .append("&lon="+ lon)
+                .append("&appid=").append(API_KEY);
+
+        try {
+            final URL uri = new URL(requestUrl.toString());
+            final Handler handler = new Handler();
+
+            new Thread(() -> {
+                HttpsURLConnection urlConnection = null;
+                try {
+                    urlConnection = (HttpsURLConnection) uri.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setReadTimeout(5000);
+                    urlConnection.connect();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String result = in.lines().collect(Collectors.joining("\n"));
+
+                    if (DEBUG) {
+                        Log.d(TAG, "Weather result: "+result);
+                    }
+
+                    // data to model
+                    Gson gson = new Gson();
+                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+
+                    // to main thread
+                    handler.post(() -> handleWeather(weatherRequest));
+                }
+                catch (Exception e) {
+                    Log.e(TAG, "getWeather request -> connection - failed", e);
+                    e.printStackTrace();
+
+                    handler.post(() -> handleError());
+                }
+                finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+            });
+
+        } catch (MalformedURLException e) {
+            if (DEBUG) {
+                Log.e(TAG, "getWeather request -> create uri - failed");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private void handleWeather(WeatherRequest weatherRequest){
+
+        String cityName = weatherRequest.getName();
+        float temp = weatherRequest.getMain().getTemp();
+
+        showStateView(State.HasData);
+        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
+    }
+
+    private void handleError(){
+        showStateView(State.ErrorData);
+        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
+    }
+
+    private void showStateView(@NonNull State state){
+        switch (state){
+            case HasData:
+                viewLoading.setVisibility(View.GONE);
+                viewError.setVisibility(View.GONE);
+
+                mainFragment.setVisibility(View.VISIBLE);
+                break;
+
+            case Loading:
+                viewError.setVisibility(View.GONE);
+                mainFragment.setVisibility(View.GONE);
+
+                viewLoading.setVisibility(View.VISIBLE);
+                break;
+
+            case ErrorData:
+                viewLoading.setVisibility(View.GONE);
+                mainFragment.setVisibility(View.GONE);
+
+                textViewError.setText(getText(R.string.cannot_load_info_error));
+                viewError.setVisibility(View.VISIBLE);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Wrong state: " + state);
+        }
+
+    }
 
 }
