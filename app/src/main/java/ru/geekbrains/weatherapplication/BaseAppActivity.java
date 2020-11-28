@@ -16,6 +16,7 @@ import android.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
 import ru.geekbrains.weatherapplication.item.OptionItem;
@@ -62,14 +63,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     public List<OptionItem> generateOptionsList() {
-        List<OptionItem> data = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            data.add(new OptionItem("item_"+ i, String.format(getString(R.string.extra_item_label), i+1), i%2==0));
-            if (DEBUG) {
-                Log.d("BaseAppActivity", "item #" + i + " - " + (i % 2 == 0));
-            }
-        }
-        return data;
+        return Constants.weather_extra_info;
     }
 
     @Override

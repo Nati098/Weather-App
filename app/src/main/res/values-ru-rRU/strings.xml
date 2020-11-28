@@ -10,7 +10,14 @@
 
     <string name="weather_description">По ощущению</string>
     <string name="weather_extra_info_title">Детали</string>
-    <string name="extra_item_label">Доп. информация %d</string>
+
+    <string name="sunrise_extra_option">Время восхода</string>
+    <string name="sunset_extra_option">Время заката</string>
+    <string name="temp_extra_option">Температура</string>
+    <string name="atm_pressure_extra_option">Атмосферное давление</string>
+    <string name="humidity_option">Влажность, %</string>
+
+
     <string name="temperature">Температура</string>
     <string name="week_forecast_title">Прогоноз на след.дни</string>
     <string name="more_info_btn">Больше информации</string>

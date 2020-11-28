@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +25,7 @@ import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -38,6 +39,7 @@ public class WeatherInfoFragment extends Fragment {
     private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
 
     private TextView toolbarTitle;
+    private TextView tempTextView;
 
     private CurrentWeatherExtraAdapter extraInfoAdapter;
     private RecyclerView extraInfoRecycler;
@@ -71,6 +73,9 @@ public class WeatherInfoFragment extends Fragment {
 
         bindView(view);
 
+
+
+
         Parcel parcel = (Parcel) getArguments().getSerializable(WEATHER_OPTIONS);
         if (savedInstanceState != null) {
             parcel = (Parcel) savedInstanceState.getSerializable(WEATHER_OPTIONS);
@@ -90,7 +95,6 @@ public class WeatherInfoFragment extends Fragment {
             btnMoreInfo.setEnabled(true);
         }
 
-
     }
 
     @Override
@@ -100,6 +104,8 @@ public class WeatherInfoFragment extends Fragment {
 
     private void bindView(View view) {
         toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
+
+        tempTextView = getActivity().findViewById(R.id.current_temp);
 
         weatherDayRecycler = view.findViewById(R.id.weather_day_recycler);
         weatherWeekRecycler = view.findViewById(R.id.weather_week_recycler);
@@ -114,6 +120,13 @@ public class WeatherInfoFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+    }
+
+    public void updateView(WeatherRequest weatherRequest) {
+        toolbarTitle.setText(weatherRequest.getName());
+
+        String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
+        tempTextView.setText(title);
     }
 
     private void setupRecycler(View view, List<OptionItem> options) {

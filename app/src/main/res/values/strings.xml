@@ -9,7 +9,12 @@
 
     <string name="weather_description">Feels like</string>
     <string name="weather_extra_info_title">Today\'s details</string>
-    <string name="extra_item_label">Extra item %d</string>
+
+    <string name="sunrise_extra_option">Sunrise time</string>
+    <string name="sunset_extra_option">Sunset time</string>
+    <string name="temp_extra_option">Temperature</string>
+    <string name="atm_pressure_extra_option">Atmospheric pressure</string>
+    <string name="humidity_option">Humidity, %</string>
 
     <string name="temperature">Temperature</string>
     <string name="temperature_unit" translatable="false">°C</string>
@@ -35,6 +40,7 @@
     <string name="empty_city_name_error">City name cannot be empty</string>
     <string name="cannot_load_info_error">Cannot load information</string>
 
+    <string name="extra_item_label" translatable="false">Extra item %d</string>
     <string name="temperature_dummy" translatable="false">7°C</string>
     <string name="time_dummy" translatable="false">12:00</string>
 </resources>
