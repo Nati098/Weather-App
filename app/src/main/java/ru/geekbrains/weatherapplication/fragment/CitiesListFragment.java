@@ -1,7 +1,6 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -24,7 +23,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,6 +31,7 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
@@ -41,7 +40,6 @@ import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
-import static ru.geekbrains.weatherapplication.data.Constants.API_KEY;
 import static ru.geekbrains.weatherapplication.data.Constants.GET_WEATHER_URL;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
@@ -53,7 +51,8 @@ public class CitiesListFragment extends Fragment {
     View mainFragment;
     private View viewLoading;
     private View viewError;
-    TextView textViewError;
+    private TextView textViewError;
+    private Button btnOkError;
 
     private TextInputEditText editTextCityName;
     private Button btnSeeWeather;
@@ -122,6 +121,8 @@ public class CitiesListFragment extends Fragment {
         viewLoading = view.findViewById(R.id.frame_loading);
         viewError = view.findViewById(R.id.frame_error);
         textViewError = view.findViewById(R.id.text_view_error);
+        btnOkError = view.findViewById(R.id.btn_ok_error);
+        btnOkError.setOnClickListener(v -> showStateView(State.HasData));
 
         editTextCityName = view.findViewById(R.id.city_name_edittext);
         editTextCityName.setFocusable(true);
@@ -176,7 +177,7 @@ public class CitiesListFragment extends Fragment {
     private void loadWeatherData(){
         showStateView(State.Loading);
 
-        getWeather(-999.0f, 37.62f);  //55.75
+        getWeather(55.75f, 37.62f);  //55.75
     }
 
     private void getWeather(float lat, float lon) {
@@ -184,7 +185,7 @@ public class CitiesListFragment extends Fragment {
 
         requestUrl.append("lat=").append(lat)
                 .append("&lon="+ lon)
-                .append("&appid=").append(API_KEY);
+                .append("&appid=").append(BuildConfig.WEATHER_API_KEY);
 
         try {
             final URL uri = new URL(requestUrl.toString());
@@ -195,8 +196,12 @@ public class CitiesListFragment extends Fragment {
                 try {
                     urlConnection = (HttpsURLConnection) uri.openConnection();
                     urlConnection.setRequestMethod("GET");
+                    urlConnection.setConnectTimeout(5000);
                     urlConnection.setReadTimeout(5000);
-                    urlConnection.connect();
+
+                    if (DEBUG) {
+                        Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
+                    }
 
                     BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     String result = in.lines().collect(Collectors.joining("\n"));
@@ -231,6 +236,8 @@ public class CitiesListFragment extends Fragment {
                 Log.e(TAG, "getWeather request -> create uri - failed");
             }
             e.printStackTrace();
+
+            handleError();
         }
     }
 
@@ -240,12 +247,11 @@ public class CitiesListFragment extends Fragment {
         float temp = weatherRequest.getMain().getTemp();
 
         showStateView(State.HasData);
-        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
+        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(weatherRequest));
     }
 
     private void handleError(){
         showStateView(State.ErrorData);
-        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
     }
 
     private void showStateView(@NonNull State state){

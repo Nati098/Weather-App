@@ -11,8 +11,7 @@ import ru.geekbrains.weatherapplication.item.OptionItem;
 import static ru.geekbrains.weatherapplication.data.SystemPreferences.IS_NIGHT_MODE;
 
 public class Constants {
-    public static final String API_KEY = "d58a8ddd18dd1ab39049edc96fac7f39";
-    public static final String GET_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?";
+    public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
 
     public static final String WEATHER_OPTIONS = "weather_options";
 
