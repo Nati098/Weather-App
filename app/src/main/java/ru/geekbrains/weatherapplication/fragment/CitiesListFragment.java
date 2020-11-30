@@ -1,6 +1,7 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -21,11 +22,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +44,12 @@ import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
+import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
+import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
 import static ru.geekbrains.weatherapplication.data.Constants.GET_WEATHER_URL;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
@@ -177,7 +187,41 @@ public class CitiesListFragment extends Fragment {
     private void loadWeatherData(){
         showStateView(State.Loading);
 
-        getWeather(55.75f, 37.62f);  //55.75
+        CityListItem city = findCityByName(editTextCityName.getText().toString());
+
+        if (city != null) {
+            if (DEBUG) {
+                Log.d(TAG, "found city:" + city);
+            }
+            getWeather(city.getCoord().getLat(), city.getCoord().getLon());
+        }
+        else {
+            if (DEBUG) {
+                Log.e(TAG, "Not found city");
+            }
+
+            showStateView(State.ErrorData);
+        }
+
+    }
+
+    private CityListItem findCityByName(String cityName) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getContext().getAssets().open(CITY_LIST_FILE_PATH)));
+
+            List<CityListItem> cities = new Gson().fromJson(reader, new TypeToken<List<CityListItem>>() {}.getType());
+
+            CityListItem res = cities.stream()
+                    .filter(city -> cityName.equals(city.getName()))
+                    .findAny().orElse(null);
+
+            reader.close();
+            return res;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     private void getWeather(float lat, float lon) {
