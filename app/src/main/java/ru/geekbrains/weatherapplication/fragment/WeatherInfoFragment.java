@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
+import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
@@ -40,6 +42,8 @@ public class WeatherInfoFragment extends Fragment {
 
     private TextView toolbarTitle;
     private TextView tempTextView;
+
+    private ImageView image_weather;
 
     private CurrentWeatherExtraAdapter extraInfoAdapter;
     private RecyclerView extraInfoRecycler;
@@ -64,7 +68,13 @@ public class WeatherInfoFragment extends Fragment {
     public static WeatherInfoFragment newInstance(WeatherRequest weatherRequest) {
         WeatherInfoFragment fragment = new WeatherInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable(WEATHER_OPTIONS, new Parcel(weatherRequest.getName(), new ArrayList<>()));
+
+        String icon = "00d";
+        if (weatherRequest.getWeather() != null) {
+            icon = weatherRequest.getWeather()[0].getIcon();
+        }
+
+        args.putSerializable(WEATHER_OPTIONS, new Parcel(weatherRequest.getName(), new ArrayList<>(), icon));
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,6 +106,8 @@ public class WeatherInfoFragment extends Fragment {
             }
             toolbarTitle.setText(title);
 
+            image_weather.setImageResource(Constants.getWeatherImage(parcel.icon));
+
             setupRecycler(view, parcel.options);
             btnMoreInfo.setEnabled(true);
         }
@@ -111,6 +123,8 @@ public class WeatherInfoFragment extends Fragment {
         toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
 
         tempTextView = getActivity().findViewById(R.id.current_temp);
+
+        image_weather = getActivity().findViewById(R.id.image_current_weather);
 
         weatherDayRecycler = view.findViewById(R.id.weather_day_recycler);
         weatherDayRecycler.setVisibility(View.GONE);
