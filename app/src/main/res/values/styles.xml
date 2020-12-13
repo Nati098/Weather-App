@@ -1,29 +1,4 @@
 <resources>
-    <!-- Light application theme. -->
-    <style name="AppCustomLightTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#3F51B5</item>
-        <item name="colorPrimaryDark">#3F51B5</item>
-        <item name="colorAccent">#00BCD4</item>
-        <item name="android:textColorSecondary">#000000</item>
-        <item name="android:windowBackground">#F4F4F6</item>
-        <item name="android:fillColor">#000000</item>
-        <item name="toolbarIconColor">@color/toolbarIconLight</item>
-        <item name="backgroundImage">@drawable/background_light</item>
-        <item name="backgroundRecyclerColor">#FFFFFF</item>
-    </style>
-
-    <!-- Dark application theme. -->
-    <style name="AppCustomDarkTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#1B2137</item>
-        <item name="colorPrimaryDark">#131625</item>
-        <item name="colorAccent">#00BCD4</item>
-        <item name="android:textColorSecondary">#FFFFFF</item>
-        <item name="android:windowBackground">#33343B</item>
-        <item name="android:fillColor">#FFFFFF</item>
-        <item name="toolbarIconColor">@color/toolbarIconDark</item>
-        <item name="backgroundImage">@drawable/background_dark</item>
-        <item name="backgroundRecyclerColor">#000000</item>
-    </style>
 
     <!-- Text format for titles -->
     <style name="TitleTextStyle">
@@ -33,11 +8,13 @@
     <!-- Text format for subtitles -->
     <style name="SubtitleTextStyle">
         <item name="android:textSize">20sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
     <!-- Text format for the main info -->
     <style name="InfoTextStyle">
         <item name="android:textSize">28sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
     <!-- Text format for extra info -->

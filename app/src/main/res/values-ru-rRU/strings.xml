@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Погода</string>
+
+    <string name="city_name_hint">Название города</string>
+    <string name="show_forecast_confirm">Вы уверены?</string>
+    <string name="show_forecast_yes">Вперед</string>
+    <string name="button_ok">ОК</string>
+
     <string name="weather_info_title">Погода в г.%1$s</string>
 
     <string name="weather_description">По ощущению</string>
     <string name="weather_extra_info_title">Детали</string>
-    <string name="extra_item_label">Доп. информация %d</string>
+
+    <string name="sunrise_extra_option">Время восхода</string>
+    <string name="sunset_extra_option">Время заката</string>
+    <string name="temp_extra_option">Температура</string>
+    <string name="atm_pressure_extra_option">Атмосферное давление</string>
+    <string name="humidity_option">Влажность, %</string>
+
 
     <string name="temperature">Температура</string>
-
     <string name="week_forecast_title">Прогоноз на след.дни</string>
-
     <string name="more_info_btn">Больше информации</string>
 
     <string name="monday">Пн</string>
@@ -26,5 +36,8 @@
     <string name="see_forecast_step3">А теперь нажмите кнопку, чтобы посмотреть прогноз:</string>
     <string name="see_forecast_btn">Посмотреть</string>
 
+    <string name="setting_night_mode">Темная тема</string>
+
+    <string name="empty_city_name_error">Название города не может быть пустым</string>
     <string name="cannot_load_info_error">Не удается загрузить информацию</string>
 </resources>
