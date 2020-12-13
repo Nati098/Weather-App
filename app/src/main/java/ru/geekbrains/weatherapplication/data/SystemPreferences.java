@@ -3,7 +3,7 @@ package ru.geekbrains.weatherapplication.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import ru.geekbrains.weatherapplication.CitiesListActivity;
+import ru.geekbrains.weatherapplication.BaseAppActivity;
 
 
 public class SystemPreferences {
@@ -13,7 +13,7 @@ public class SystemPreferences {
 
 
     private static SharedPreferences getSP() {
-        return CitiesListActivity.getContext().getSharedPreferences(SYSTEM_PREFERENCES, Context.MODE_PRIVATE);
+        return BaseAppActivity.getContext().getSharedPreferences(SYSTEM_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static boolean getBooleanPreference(String key) {

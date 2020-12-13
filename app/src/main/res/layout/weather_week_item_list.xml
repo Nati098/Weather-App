@@ -6,7 +6,7 @@
     android:layout_margin="8dp"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="?attr/backgroundRecyclerColor">
+    android:background="?backgroundRecyclerColor">
 
     <ImageView
         android:id="@+id/weather_img"
@@ -16,7 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/ic_cloudy" />
+        android:src="@drawable/ic_cloudy"
+        app:tint="?android:textColorSecondary"/>
 
     <TextView
         android:id="@+id/time_point_text"
@@ -27,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="8dp"
         android:text="@string/temperature"
-        android:textAppearance="@style/SubtitleTextStyle" />
+        style="@style/SubtitleTextStyle" />
 
     <TextView
         android:id="@+id/temperature_text"
@@ -37,5 +38,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="7"
-        android:textAppearance="@style/SubtitleTextStyle" />
+        style="@style/SubtitleTextStyle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
