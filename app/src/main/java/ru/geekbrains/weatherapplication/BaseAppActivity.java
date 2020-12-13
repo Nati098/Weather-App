@@ -7,13 +7,10 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.Toolbar;
-
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
@@ -21,6 +18,7 @@ import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
+import static ru.geekbrains.weatherapplication.data.Constants.*;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 
@@ -46,7 +44,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         ImageButton btnSettings = findViewById(R.id.btn_settings);
         btnSettings.setOnClickListener((v -> startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE)));
 
-        openFragment(CitiesListFragment.newInstance("", generateOptionsList()));
+        openFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
     }
 
     @Override
@@ -61,15 +59,13 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         return context;
     }
 
-    public List<OptionItem> generateOptionsList() {
-        List<OptionItem> data = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            data.add(new OptionItem("item_"+ i, String.format(getString(R.string.extra_item_label), i+1), i%2==0));
-            if (DEBUG) {
-                Log.d("BaseAppActivity", "item #" + i + " - " + (i % 2 == 0));
-            }
-        }
-        return data;
+    public List<OptionItem> getWeatherExtraInfo() {
+        return Arrays.asList(//new OptionItem(SUNRISE_TIME_OPTION, Resources.getSystem().getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
+                //new OptionItem(SUNSET_TIME_OPTION, Resources.getSystem().getString(R.string.sunset_extra_option), SystemPreferences.getBooleanPreference(SUNSET_TIME_OPTION)),
+                //new OptionItem(TEMPERATURE_OPTION, Resources.getSystem().getString(R.string.temp_extra_option), SystemPreferences.getBooleanPreference(TEMPERATURE_OPTION)),
+                //new OptionItem(ATM_PRESSURE_OPTION, Resources.getSystem().getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(ATM_PRESSURE_OPTION)),
+                new OptionItem(WIND_OPTION, "Wind", SystemPreferences.getBooleanPreference(WIND_OPTION)),
+                new OptionItem(HUMIDITY_OPTION, getString(R.string.humidity_option), SystemPreferences.getBooleanPreference(HUMIDITY_OPTION)));
     }
 
     @Override

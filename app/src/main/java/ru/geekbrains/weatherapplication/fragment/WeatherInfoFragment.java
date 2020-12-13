@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +24,9 @@ import java.util.List;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
+import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.Parcel;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -34,10 +36,14 @@ import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
 public class WeatherInfoFragment extends Fragment {
+    private static final String TAG = WeatherInfoFragment.class.getSimpleName();
 
     private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
 
     private TextView toolbarTitle;
+    private TextView tempTextView;
+
+    private ImageView image_weather;
 
     private CurrentWeatherExtraAdapter extraInfoAdapter;
     private RecyclerView extraInfoRecycler;
@@ -55,6 +61,20 @@ public class WeatherInfoFragment extends Fragment {
         WeatherInfoFragment fragment = new WeatherInfoFragment();
         Bundle args = new Bundle();
         args.putSerializable(WEATHER_OPTIONS, new Parcel(cityName, options));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static WeatherInfoFragment newInstance(WeatherRequest weatherRequest) {
+        WeatherInfoFragment fragment = new WeatherInfoFragment();
+        Bundle args = new Bundle();
+
+        String icon = "00d";
+        if (weatherRequest.getWeather() != null) {
+            icon = weatherRequest.getWeather()[0].getIcon();
+        }
+
+        args.putSerializable(WEATHER_OPTIONS, new Parcel(weatherRequest.getName(), new ArrayList<>(), icon));
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,10 +106,11 @@ public class WeatherInfoFragment extends Fragment {
             }
             toolbarTitle.setText(title);
 
+            image_weather.setImageResource(Constants.getWeatherImage(parcel.icon));
+
             setupRecycler(view, parcel.options);
             btnMoreInfo.setEnabled(true);
         }
-
 
     }
 
@@ -101,8 +122,14 @@ public class WeatherInfoFragment extends Fragment {
     private void bindView(View view) {
         toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
 
+        tempTextView = getActivity().findViewById(R.id.current_temp);
+
+        image_weather = getActivity().findViewById(R.id.image_current_weather);
+
         weatherDayRecycler = view.findViewById(R.id.weather_day_recycler);
+        weatherDayRecycler.setVisibility(View.GONE);
         weatherWeekRecycler = view.findViewById(R.id.weather_week_recycler);
+        weatherWeekRecycler.setVisibility(View.GONE);
         extraInfoRecycler = view.findViewById(R.id.extra_info_recycler);
 
         btnMoreInfo = view.findViewById(R.id.btn_more_info);
@@ -114,6 +141,13 @@ public class WeatherInfoFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+    }
+
+    public void updateView(WeatherRequest weatherRequest) {
+        toolbarTitle.setText(weatherRequest.getName());
+
+        String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
+        tempTextView.setText(title);
     }
 
     private void setupRecycler(View view, List<OptionItem> options) {
