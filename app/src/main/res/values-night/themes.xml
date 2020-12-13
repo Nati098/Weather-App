@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomTextButtonTheme" parent="">
+        <item name="android:textAppearance">@style/InfoTextStyle</item>
+        <item name="backgroundTint">@color/btn_color</item>
+    </style>
+
+</resources>
