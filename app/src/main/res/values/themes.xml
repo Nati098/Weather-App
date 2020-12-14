@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Light application theme. -->
-    <style name="AppCustomLightTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppCustomLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#2E86C1</item>
         <item name="colorPrimaryDark">#1F587E</item>
         <item name="colorAccent">#00BCD4</item>
@@ -12,10 +12,11 @@
         <item name="toolbarIconColor">@color/toolbarIconLight</item>
         <item name="backgroundImage">@drawable/background_light</item>
         <item name="backgroundRecyclerColor">#FFFFFF</item>
+        <item name="android:textColorHint">?android:textColorSecondary</item>
     </style>
 
     <!-- Dark application theme. -->
-    <style name="AppCustomDarkTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppCustomDarkTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#1B2137</item>
         <item name="colorPrimaryDark">#131625</item>
         <item name="colorAccent">#00BCD4</item>
@@ -25,6 +26,7 @@
         <item name="toolbarIconColor">@color/toolbarIconLight</item>
         <item name="backgroundImage">@drawable/background_dark</item>
         <item name="backgroundRecyclerColor">#1B2137</item>
+        <item name="android:textColorHint">?android:textColorSecondary</item>
     </style>
 
     <style name="CustomTextButtonTheme" parent="">

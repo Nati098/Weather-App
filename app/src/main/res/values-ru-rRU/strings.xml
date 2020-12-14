@@ -2,10 +2,15 @@
 <resources>
     <string name="app_name">Погода</string>
 
+    <string name="menu_item_forecast">Прогноз</string>
+    <string name="menu_item_about">О нас</string>
+    <string name="about_description">Здесь должна быть информация про автора</string>
+
     <string name="city_name_hint">Название города</string>
     <string name="show_forecast_confirm">Вы уверены?</string>
     <string name="show_forecast_yes">Вперед</string>
     <string name="button_ok">ОК</string>
+    <string name="button_retry">Попробовать снова</string>
 
     <string name="weather_info_title">Погода в г.%1$s</string>
 
@@ -36,8 +41,10 @@
     <string name="see_forecast_step3">А теперь нажмите кнопку, чтобы посмотреть прогноз:</string>
     <string name="see_forecast_btn">Посмотреть</string>
 
+    <string name="settings">Настройки</string>
     <string name="setting_night_mode">Темная тема</string>
 
+    <string name="error_title">Ошибка!</string>
     <string name="empty_city_name_error">Название города не может быть пустым</string>
     <string name="cannot_load_info_error">Не удается загрузить информацию</string>
 </resources>

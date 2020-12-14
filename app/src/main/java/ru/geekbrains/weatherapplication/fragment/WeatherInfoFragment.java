@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,7 @@ public class WeatherInfoFragment extends Fragment {
 
     private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
 
-    private TextView toolbarTitle;
+    private Toolbar toolbar;
     private TextView tempTextView;
 
     private ImageView image_weather;
@@ -104,7 +105,7 @@ public class WeatherInfoFragment extends Fragment {
             if (DEBUG) {
                 Log.d("WeatherInfoFragment", "title = " + title);
             }
-            toolbarTitle.setText(title);
+            toolbar.setTitle(title);
 
             image_weather.setImageResource(Constants.getWeatherImage(parcel.icon));
 
@@ -120,7 +121,7 @@ public class WeatherInfoFragment extends Fragment {
     }
 
     private void bindView(View view) {
-        toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
+        toolbar = getActivity().findViewById(R.id.toolbar);
 
         tempTextView = getActivity().findViewById(R.id.current_temp);
 
@@ -144,7 +145,7 @@ public class WeatherInfoFragment extends Fragment {
     }
 
     public void updateView(WeatherRequest weatherRequest) {
-        toolbarTitle.setText(weatherRequest.getName());
+        toolbar.setTitle(weatherRequest.getName());
 
         String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
         tempTextView.setText(title);
