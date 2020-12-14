@@ -1,6 +1,7 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,10 +54,8 @@ import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 public class CitiesListFragment extends Fragment {
     private static final String TAG = CitiesListFragment.class.getSimpleName();
 
-    View mainFragment;
+    private View mainFragment;
     private View viewLoading;
-    private View viewError;
-    private TextView textViewError;
     private Button btnOkError;
 
     private TextInputEditText editTextCityName;
@@ -64,6 +65,8 @@ public class CitiesListFragment extends Fragment {
     private RecyclerView optionsRecycler;
 
     private OpenFragmentListener openFragmentListener;
+
+    private CityListItem city;  // city, which has been found in the 1st trying to load weather, saved here and is used in next try
 
 
     public static CitiesListFragment newInstance(String cityName, List<OptionItem> data) {
@@ -122,8 +125,6 @@ public class CitiesListFragment extends Fragment {
     private void bindView(View view) {
         mainFragment = view.findViewById(R.id.weather_day_info);
         viewLoading = view.findViewById(R.id.frame_loading);
-        viewError = view.findViewById(R.id.frame_error);
-        textViewError = view.findViewById(R.id.text_view_error);
         btnOkError = view.findViewById(R.id.btn_ok_error);
         btnOkError.setOnClickListener(v -> showStateView(State.HasData));
 
@@ -142,7 +143,8 @@ public class CitiesListFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                validate((TextView) editTextCityName, getResources().getString(R.string.empty_city_name_error));
+                validate(editTextCityName, getResources().getString(R.string.empty_city_name_error));
+                city = null;  // if we change smth, we should find city object by name again
             }
         });
 
@@ -180,7 +182,9 @@ public class CitiesListFragment extends Fragment {
     private void loadWeatherData(){
         showStateView(State.Loading);
 
-        CityListItem city = findCityByName(editTextCityName.getText().toString());
+        if (city == null) {
+            city = findCityByName(editTextCityName.getText().toString());
+        }
 
         if (city != null) {
             if (DEBUG) {
@@ -295,13 +299,11 @@ public class CitiesListFragment extends Fragment {
         switch (state){
             case HasData:
                 viewLoading.setVisibility(View.GONE);
-                viewError.setVisibility(View.GONE);
 
                 mainFragment.setVisibility(View.VISIBLE);
                 break;
 
             case Loading:
-                viewError.setVisibility(View.GONE);
                 mainFragment.setVisibility(View.GONE);
 
                 viewLoading.setVisibility(View.VISIBLE);
@@ -311,14 +313,24 @@ public class CitiesListFragment extends Fragment {
                 viewLoading.setVisibility(View.GONE);
                 mainFragment.setVisibility(View.GONE);
 
-                textViewError.setText(getText(R.string.cannot_load_info_error));
-                viewError.setVisibility(View.VISIBLE);
+                createAlertDialog(getText(R.string.cannot_load_info_error));
                 break;
 
             default:
                 throw new IllegalArgumentException("Wrong state: " + state);
         }
 
+    }
+
+    private void createAlertDialog(CharSequence errorMsg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.error_title)
+                .setMessage(errorMsg)
+                .setIcon(R.drawable.ic_zip)
+                .setCancelable(true)
+                .setNegativeButton(R.string.button_retry,
+                        (dialog, id) -> loadWeatherData())
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> { });
     }
 
 }

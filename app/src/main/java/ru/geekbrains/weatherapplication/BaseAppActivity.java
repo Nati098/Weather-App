@@ -3,6 +3,7 @@ package ru.geekbrains.weatherapplication;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -92,7 +94,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
             }
 
         } else if (id == R.id.nav_about) {
-            startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+            //startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+            createAlertDialog();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout_baseapp);
@@ -170,6 +173,18 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                 Log.d("BaseAppActivity", "onBackPressed -> remained in stack: "+getSupportFragmentManager().getBackStackEntryCount());
             }
         }
+    }
+
+    private void createAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.menu_item_about)
+                .setMessage(R.string.about_description)
+                .setIcon(R.drawable.ic_about)
+                .setCancelable(true)
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> {});
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

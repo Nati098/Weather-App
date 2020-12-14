@@ -9,6 +9,7 @@
     <string name="show_forecast_confirm">Are you sure?</string>
     <string name="show_forecast_yes">Go</string>
     <string name="button_ok">OK</string>
+    <string name="button_retry">Retry</string>
 
     <string name="weather_info_title">%1$s\'s weather</string>
 
@@ -43,6 +44,7 @@
     <string name="settings">Settings</string>
     <string name="setting_night_mode">Night mode</string>
 
+    <string name="error_title">Error!</string>
     <string name="empty_city_name_error">City name cannot be empty</string>
     <string name="cannot_load_info_error">Cannot load information</string>
 
