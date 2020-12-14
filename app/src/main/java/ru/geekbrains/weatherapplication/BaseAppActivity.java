@@ -84,9 +84,15 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_forecast) {
-            Toast.makeText(getApplicationContext(), "NAV FORECAST", Toast.LENGTH_SHORT).show();
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+            }
+            else {
+                startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
+            }
+
         } else if (id == R.id.nav_about) {
-            Toast.makeText(getApplicationContext(), "NAV ABOUT", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), AboutActivity.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout_baseapp);

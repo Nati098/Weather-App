@@ -3,6 +3,7 @@
 
     <string name="menu_item_forecast">Forecast</string>
     <string name="menu_item_about">About us</string>
+    <string name="about_description">Here should be information about the author</string>
 
     <string name="city_name_hint">City name</string>
     <string name="show_forecast_confirm">Are you sure?</string>
@@ -49,8 +50,8 @@
     <string name="extra_item_label" translatable="false">Extra item %d</string>
     <string name="temperature_dummy" translatable="false">7°C</string>
     <string name="time_dummy" translatable="false">12:00</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_title" translatable="false">Mary Sue</string>
+    <string name="nav_header_subtitle" translatable="false">a_n_onim@mail.ru</string>
 
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
