@@ -4,7 +4,9 @@ import androidx.fragment.app.Fragment;
 
 public interface OpenFragmentListener {
 
-    void openFragment(Fragment fragment);
-    void openFragment(int id, Fragment fragment);
+    void addFragment(Fragment fragment);
+    void addFragment(int id, Fragment fragment);
+
+    void replaceFragment(Fragment fragment);
 
 }

@@ -1,7 +1,6 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -23,17 +22,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -291,7 +284,7 @@ public class CitiesListFragment extends Fragment {
         float temp = weatherRequest.getMain().getTemp();
 
         showStateView(State.HasData);
-        openFragmentListener.openFragment(WeatherInfoFragment.newInstance(weatherRequest));
+        openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(weatherRequest));
     }
 
     private void handleError(){

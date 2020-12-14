@@ -37,8 +37,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="text|textNoSuggestions|textCapWords"
                     style="@style/RegularTextStyle"
-                    android:textColor="@null"
-                    android:hint="@string/city_name_hint"/>
+
+                    android:hint="@string/city_name_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView

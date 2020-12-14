@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Погода</string>
 
+    <string name="menu_item_forecast">Прогноз</string>
+    <string name="menu_item_about">О нас</string>
+
     <string name="city_name_hint">Название города</string>
     <string name="show_forecast_confirm">Вы уверены?</string>
     <string name="show_forecast_yes">Вперед</string>

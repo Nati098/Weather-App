@@ -8,7 +8,6 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
 
-        android:tint="?attr/toolbarIconColor"
         android:background="?attr/colorPrimary" />
 
 </menu>
