@@ -2,6 +2,7 @@ package ru.geekbrains.weatherapplication;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -9,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +44,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
             setTheme(R.style.AppCustomLightTheme);
         }
 
-        ImageButton btnSettings = findViewById(R.id.btn_settings);
-        btnSettings.setOnClickListener((v -> startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE)));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         openFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
     }
@@ -66,6 +69,22 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                 //new OptionItem(ATM_PRESSURE_OPTION, Resources.getSystem().getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(ATM_PRESSURE_OPTION)),
                 new OptionItem(WIND_OPTION, "Wind", SystemPreferences.getBooleanPreference(WIND_OPTION)),
                 new OptionItem(HUMIDITY_OPTION, getString(R.string.humidity_option), SystemPreferences.getBooleanPreference(HUMIDITY_OPTION)));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.action_settings) {
+            startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
+        }
+        return true;
     }
 
     @Override

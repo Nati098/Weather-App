@@ -36,6 +36,7 @@
     <string name="see_forecast_step3">And push the button to see the forecast:</string>
     <string name="see_forecast_btn">See</string>
 
+    <string name="settings">Settings</string>
     <string name="setting_night_mode">Night mode</string>
 
     <string name="empty_city_name_error">City name cannot be empty</string>
@@ -44,4 +45,6 @@
     <string name="extra_item_label" translatable="false">Extra item %d</string>
     <string name="temperature_dummy" translatable="false">7°C</string>
     <string name="time_dummy" translatable="false">12:00</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
 </resources>
