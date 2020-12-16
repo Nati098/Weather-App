@@ -12,6 +12,7 @@ import static ru.geekbrains.weatherapplication.data.SystemPreferences.IS_NIGHT_M
 
 public class Constants {
     public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
+    public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?";
     public static final String CITY_LIST_FILE_PATH = "city.list.json";
 
     public static final String WEATHER_OPTIONS = "weather_options";

@@ -12,13 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -42,16 +40,14 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_app);
-
         context = getApplicationContext();
-
         if (SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE)) {
             setTheme(R.style.AppCustomDarkTheme);
         }
         else {
             setTheme(R.style.AppCustomLightTheme);
         }
+        setContentView(R.layout.activity_base_app);
 
         bindView();
 
@@ -116,11 +112,11 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     public List<OptionItem> getWeatherExtraInfo() {
-        return Arrays.asList(//new OptionItem(SUNRISE_TIME_OPTION, Resources.getSystem().getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
-                //new OptionItem(SUNSET_TIME_OPTION, Resources.getSystem().getString(R.string.sunset_extra_option), SystemPreferences.getBooleanPreference(SUNSET_TIME_OPTION)),
-                //new OptionItem(TEMPERATURE_OPTION, Resources.getSystem().getString(R.string.temp_extra_option), SystemPreferences.getBooleanPreference(TEMPERATURE_OPTION)),
-                //new OptionItem(ATM_PRESSURE_OPTION, Resources.getSystem().getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(ATM_PRESSURE_OPTION)),
-                new OptionItem(WIND_OPTION, "Wind", SystemPreferences.getBooleanPreference(WIND_OPTION)),
+        return Arrays.asList(new OptionItem(SUNRISE_TIME_OPTION, getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
+                new OptionItem(SUNSET_TIME_OPTION, getString(R.string.sunset_extra_option), SystemPreferences.getBooleanPreference(SUNSET_TIME_OPTION)),
+                new OptionItem(TEMPERATURE_OPTION, getString(R.string.temp_extra_option), SystemPreferences.getBooleanPreference(TEMPERATURE_OPTION)),
+                new OptionItem(ATM_PRESSURE_OPTION, getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(ATM_PRESSURE_OPTION)),
+                //new OptionItem(WIND_OPTION, getString(R.string.wind_option), SystemPreferences.getBooleanPreference(WIND_OPTION)),
                 new OptionItem(HUMIDITY_OPTION, getString(R.string.humidity_option), SystemPreferences.getBooleanPreference(HUMIDITY_OPTION)));
     }
 

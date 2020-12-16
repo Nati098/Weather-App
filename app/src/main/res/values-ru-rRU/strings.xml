@@ -22,7 +22,7 @@
     <string name="temp_extra_option">Температура</string>
     <string name="atm_pressure_extra_option">Атмосферное давление</string>
     <string name="humidity_option">Влажность, %</string>
-
+    <string name="wind_option">Ветер</string>
 
     <string name="temperature">Температура</string>
     <string name="week_forecast_title">Прогоноз на след.дни</string>

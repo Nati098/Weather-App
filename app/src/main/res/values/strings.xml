@@ -21,6 +21,7 @@
     <string name="temp_extra_option">Temperature</string>
     <string name="atm_pressure_extra_option">Atmospheric pressure</string>
     <string name="humidity_option">Humidity, %</string>
+    <string name="wind_option">Wind</string>
 
     <string name="temperature">Temperature</string>
     <string name="temperature_unit" translatable="false">°C</string>
