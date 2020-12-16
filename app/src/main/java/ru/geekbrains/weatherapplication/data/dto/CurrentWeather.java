@@ -2,31 +2,67 @@ package ru.geekbrains.weatherapplication.data.dto;
 
 public class CurrentWeather {
 
-    private String main;
-    private String description;
-    private String icon;
+    private int sunrise;
+    private int sunset;
+    private double temp;
+    private double feelsLike;
+    private int pressure;
+    private int humidity;
+    private Weather[] weather;
 
-    public String getDescription() {
-        return description;
+    public int getSunrise() {
+        return sunrise;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSunrise(int sunrise) {
+        this.sunrise = sunrise;
     }
 
-    public String getMain() {
-        return main;
+    public int getSunset() {
+        return sunset;
     }
 
-    public void setMain(String main) {
-        this.main = main;
+    public void setSunset(int sunset) {
+        this.sunset = sunset;
     }
 
-    public String getIcon() {
-        return icon;
+    public double getTemp() {
+        return temp;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setTemp(double temp) {
+        this.temp = temp;
+    }
+
+    public double getFeelsLike() {
+        return feelsLike;
+    }
+
+    public void setFeelsLike(double feelsLike) {
+        this.feelsLike = feelsLike;
+    }
+
+    public int getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(int pressure) {
+        this.pressure = pressure;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
+    }
+
+    public Weather[] getWeather() {
+        return weather;
+    }
+
+    public void setWeather(Weather[] weather) {
+        this.weather = weather;
     }
 }

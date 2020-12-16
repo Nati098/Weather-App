@@ -2,13 +2,13 @@ package ru.geekbrains.weatherapplication.data.request;
 
 import ru.geekbrains.weatherapplication.data.dto.Clouds;
 import ru.geekbrains.weatherapplication.data.dto.Coordinates;
-import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
+import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.dto.Main;
 import ru.geekbrains.weatherapplication.data.dto.Wind;
 
-public class WeatherRequest {
+public class CurrentWeatherRequest {
     private Coordinates coord;
-    private CurrentWeather[] weather;
+    private Weather[] weather;
     private Main main;
     private Wind wind;
     private Clouds clouds;
@@ -22,11 +22,11 @@ public class WeatherRequest {
         this.coord = coord;
     }
 
-    public CurrentWeather[] getWeather() {
+    public Weather[] getWeather() {
         return weather;
     }
 
-    public void setWeather(CurrentWeather[] weather) {
+    public void setWeather(Weather[] weather) {
         this.weather = weather;
     }
 

@@ -27,7 +27,7 @@ import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
 import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.Parcel;
-import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -63,7 +63,7 @@ public class WeatherInfoFragment extends Fragment {
         return fragment;
     }
 
-    public static WeatherInfoFragment newInstance(WeatherRequest weatherRequest) {
+    public static WeatherInfoFragment newInstance(CurrentWeatherRequest weatherRequest) {
         WeatherInfoFragment fragment = new WeatherInfoFragment();
         Bundle args = new Bundle();
 
@@ -139,7 +139,7 @@ public class WeatherInfoFragment extends Fragment {
         });
     }
 
-    public void updateView(WeatherRequest weatherRequest) {
+    public void updateView(CurrentWeatherRequest weatherRequest) {
         toolbar.setTitle(weatherRequest.getName());
 
         String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));

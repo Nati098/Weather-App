@@ -1,7 +1,6 @@
 package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +39,7 @@ import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
-import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
@@ -253,7 +251,7 @@ public class CitiesListFragment extends Fragment {
 
                     // data to model
                     Gson gson = new Gson();
-                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+                    final CurrentWeatherRequest weatherRequest = gson.fromJson(result, CurrentWeatherRequest.class);
 
                     // to main thread
                     handler.post(() -> handleWeather(weatherRequest));
@@ -282,7 +280,7 @@ public class CitiesListFragment extends Fragment {
         }
     }
 
-    private void handleWeather(WeatherRequest weatherRequest){
+    private void handleWeather(CurrentWeatherRequest weatherRequest){
 
         String cityName = weatherRequest.getName();
         float temp = weatherRequest.getMain().getTemp();
