@@ -49,9 +49,6 @@ public class WeatherInfoFragment extends Fragment {
     private CurrentWeatherExtraAdapter extraInfoAdapter;
     private RecyclerView extraInfoRecycler;
 
-    private WeatherWeekAdapter weatherDayAdapter;
-    private RecyclerView weatherDayRecycler;
-
     private WeatherWeekAdapter weatherWeekAdapter;
     private RecyclerView weatherWeekRecycler;
 
@@ -127,8 +124,6 @@ public class WeatherInfoFragment extends Fragment {
 
         image_weather = getActivity().findViewById(R.id.image_current_weather);
 
-        weatherDayRecycler = view.findViewById(R.id.weather_day_recycler);
-        weatherDayRecycler.setVisibility(View.GONE);
         weatherWeekRecycler = view.findViewById(R.id.weather_week_recycler);
         weatherWeekRecycler.setVisibility(View.GONE);
         extraInfoRecycler = view.findViewById(R.id.extra_info_recycler);
@@ -155,13 +150,6 @@ public class WeatherInfoFragment extends Fragment {
         extraInfoAdapter = new CurrentWeatherExtraAdapter(view.getContext(), generateExtraInfoList(options), (adapterView, v, i, l) -> { });
         extraInfoRecycler.setAdapter(extraInfoAdapter);
         extraInfoRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-
-        weatherDayRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        weatherDayAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_day_item_list,
-                generateWeatherDayList(), (adapterView, v, i, l) -> { });
-        weatherDayRecycler.setAdapter(weatherDayAdapter);
-
 
         weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
