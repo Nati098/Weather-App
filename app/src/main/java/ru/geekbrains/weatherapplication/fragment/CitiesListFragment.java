@@ -44,7 +44,6 @@ import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
-import static ru.geekbrains.weatherapplication.data.Constants.GET_WEATHER_URL;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
@@ -220,11 +219,7 @@ public class CitiesListFragment extends Fragment {
     }
 
     private void getWeather(float lat, float lon) {
-        StringBuilder requestUrl = new StringBuilder(GET_WEATHER_URL);
 
-        requestUrl.append("lat=").append(lat)
-                .append("&lon="+ lon)
-                .append("&appid=").append(BuildConfig.WEATHER_API_KEY);
 
         try {
             final URL uri = new URL(requestUrl.toString());
