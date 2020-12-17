@@ -1,18 +1,44 @@
 package ru.geekbrains.weatherapplication.data.request;
 
+import android.os.Parcel;
+
 import ru.geekbrains.weatherapplication.data.dto.Clouds;
 import ru.geekbrains.weatherapplication.data.dto.Coordinates;
 import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.dto.Main;
 import ru.geekbrains.weatherapplication.data.dto.Wind;
 
-public class CurrentWeatherRequest {
+
+public class CurrentWeatherRequest implements MainRequest {
     private Coordinates coord;
     private Weather[] weather;
     private Main main;
     private Wind wind;
     private Clouds clouds;
     private String name;
+
+    public CurrentWeatherRequest() {}
+
+    public CurrentWeatherRequest(Parcel in) {
+        coord = in.readParcelable(Coordinates.class.getClassLoader());
+        weather = in.createTypedArray(Weather.CREATOR);
+        main = in.readParcelable(Main.class.getClassLoader());
+        wind = in.readParcelable(Wind.class.getClassLoader());
+        clouds = in.readParcelable(Clouds.class.getClassLoader());
+        name = in.readString();
+    }
+
+    public static final Creator<CurrentWeatherRequest> CREATOR = new Creator<CurrentWeatherRequest>() {
+        @Override
+        public CurrentWeatherRequest createFromParcel(Parcel in) {
+            return new CurrentWeatherRequest(in);
+        }
+
+        @Override
+        public CurrentWeatherRequest[] newArray(int size) {
+            return new CurrentWeatherRequest[size];
+        }
+    };
 
     public Coordinates getCoord() {
         return coord;
@@ -62,4 +88,18 @@ public class CurrentWeatherRequest {
         this.name = name;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(coord,0);
+        parcel.writeTypedArray(weather, 0);
+        parcel.writeParcelable(main,0);
+        parcel.writeParcelable(wind,0);
+        parcel.writeParcelable(clouds,0);
+        parcel.writeString(name);
+    }
 }

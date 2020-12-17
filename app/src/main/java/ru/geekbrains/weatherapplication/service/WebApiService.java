@@ -1,20 +1,74 @@
 package ru.geekbrains.weatherapplication.service;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
+
 import ru.geekbrains.weatherapplication.BuildConfig;
+import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.MainRequest;
+
+import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 public class WebApiService extends JobIntentService {
+    private static final String TAG = WebApiService.class.getSimpleName();
+
+    public static final String WEATHER_REQUEST_MODE = "weather_request_mode";
+    public static final String WEATHER_REQUEST_RESULT = "weather_request_result";
     public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?";
-    public static final String WEATHER_REQUEST_MODE = "weather_request_mode";
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
         String requestUrl = buildRequestUrl(intent);
+        try {
+            final URL uri = new URL(requestUrl);
+
+            HttpsURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpsURLConnection) uri.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.setReadTimeout(5000);
+                if (DEBUG) {
+                    Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
+                }
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String result = in.lines().collect(Collectors.joining("\n"));
+                if (DEBUG) {
+                    Log.d(TAG, "Weather result: "+result);
+                }
+
+                convertAndBroadcast(result);
+            }
+            catch (Exception e) {
+                Log.e(TAG, "onHandleWork, request -> connection - failed", e);
+                e.printStackTrace();
+            }
+            finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+
+
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "onHandleWork, cannot create URL", e);
+            e.printStackTrace();
+        }
 
     }
 
@@ -43,6 +97,21 @@ public class WebApiService extends JobIntentService {
         return requestUrl.toString();
     }
 
+    private void convertAndBroadcast(String result) {
+        Gson gson = new Gson();
+        final MainRequest weatherRequest = null;
+
+        switch ()
+
+                //gson.fromJson(result, CurrentWeatherRequest.class);
+
+    }
+
+    private void sendBroadcast (MainRequest result) {
+        Intent broadcastIntent = new Intent(WEATHER_REQUEST_RESULT);
+        broadcastIntent.putExtra(WEATHER_REQUEST_RESULT, result);
+        sendBroadcast(broadcastIntent);
+    }
 
     private enum Exclude {
         CURRENT("current"),

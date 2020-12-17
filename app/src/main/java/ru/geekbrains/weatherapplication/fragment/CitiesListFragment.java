@@ -218,62 +218,6 @@ public class CitiesListFragment extends Fragment {
         }
     }
 
-    private void getWeather(float lat, float lon) {
-
-
-        try {
-            final URL uri = new URL(requestUrl.toString());
-            final Handler handler = new Handler();
-
-            new Thread(() -> {
-                HttpsURLConnection urlConnection = null;
-                try {
-                    urlConnection = (HttpsURLConnection) uri.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setConnectTimeout(5000);
-                    urlConnection.setReadTimeout(5000);
-
-                    if (DEBUG) {
-                        Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
-                    }
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String result = in.lines().collect(Collectors.joining("\n"));
-
-                    if (DEBUG) {
-                        Log.d(TAG, "Weather result: "+result);
-                    }
-
-                    // data to model
-                    Gson gson = new Gson();
-                    final CurrentWeatherRequest weatherRequest = gson.fromJson(result, CurrentWeatherRequest.class);
-
-                    // to main thread
-                    handler.post(() -> handleWeather(weatherRequest));
-                }
-                catch (Exception e) {
-                    Log.e(TAG, "getWeather request -> connection - failed", e);
-                    e.printStackTrace();
-
-                    handler.post(() -> handleError());
-                }
-                finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                }
-
-            });
-
-        } catch (MalformedURLException e) {
-            if (DEBUG) {
-                Log.e(TAG, "getWeather request -> create uri - failed");
-            }
-            e.printStackTrace();
-
-            handleError();
-        }
-    }
 
     private void handleWeather(CurrentWeatherRequest weatherRequest){
 
