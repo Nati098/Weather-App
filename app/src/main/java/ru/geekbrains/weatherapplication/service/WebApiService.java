@@ -19,6 +19,7 @@ import javax.net.ssl.HttpsURLConnection;
 import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
+import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
@@ -29,6 +30,8 @@ public class WebApiService extends JobIntentService {
     public static final String WEATHER_REQUEST_RESULT = "weather_request_result";
     public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?";
+
+    private int requestMode;
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
@@ -53,6 +56,7 @@ public class WebApiService extends JobIntentService {
                 }
 
                 convertAndBroadcast(result);
+                in.close();
             }
             catch (Exception e) {
                 Log.e(TAG, "onHandleWork, request -> connection - failed", e);
@@ -78,8 +82,8 @@ public class WebApiService extends JobIntentService {
                 .append("&lon=").append(intent.getStringExtra("lon"))
                 .append("&exclude=");
 
-        int mode = intent.getIntExtra(WEATHER_REQUEST_MODE, 0);
-        switch (mode) {
+        requestMode = intent.getIntExtra(WEATHER_REQUEST_MODE, 0);
+        switch (requestMode) {
             case 1:
                 requestUrl.append(Exclude.MINUTELY.description).append(",")
                         .append(Exclude.HOURLY.description).append(",")
@@ -99,11 +103,15 @@ public class WebApiService extends JobIntentService {
 
     private void convertAndBroadcast(String result) {
         Gson gson = new Gson();
-        final MainRequest weatherRequest = null;
 
-        switch ()
-
-                //gson.fromJson(result, CurrentWeatherRequest.class);
+        if (requestMode == 0) {
+            final CurrentWeatherRequest weatherRequest = gson.fromJson(result, CurrentWeatherRequest.class);
+            sendBroadcast(weatherRequest);
+        }
+        else {
+            final WeekWeatherRequest weatherRequest = gson.fromJson(result, WeekWeatherRequest.class);
+            sendBroadcast(weatherRequest);
+        }
 
     }
 
