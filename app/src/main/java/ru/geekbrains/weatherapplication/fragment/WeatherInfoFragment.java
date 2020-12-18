@@ -28,6 +28,7 @@ import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
 import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -36,7 +37,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
-public class WeatherInfoFragment extends Fragment {
+public class WeatherInfoFragment extends Fragment implements BaseFragment {
     private static final String TAG = WeatherInfoFragment.class.getSimpleName();
 
     private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
@@ -185,5 +186,10 @@ public class WeatherInfoFragment extends Fragment {
             data.add(new WeatherItem(getString(R.string.sunday), R.drawable.ic_cloudy, i+7));
         }
         return data;
+    }
+
+    @Override
+    void updateView(MainRequest data) {
+
     }
 }

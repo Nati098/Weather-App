@@ -19,6 +19,7 @@
     <string name="sunrise_extra_option">Sunrise time</string>
     <string name="sunset_extra_option">Sunset time</string>
     <string name="temp_extra_option">Temperature</string>
+    <string name="feelslike_extra_option">Feels like</string>
     <string name="atm_pressure_extra_option">Atmospheric pressure</string>
     <string name="humidity_option">Humidity, %</string>
     <string name="wind_option">Wind</string>

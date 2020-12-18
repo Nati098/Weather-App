@@ -11,6 +11,7 @@ public class Constants {
     public static final String SUNRISE_TIME_OPTION = "sunrise_time_option";
     public static final String SUNSET_TIME_OPTION = "sunset_time_option";
     public static final String TEMPERATURE_OPTION = "temperature_options";
+    public static final String FEELSLIKE_OPTION = "feelslike_options";
     public static final String ATM_PRESSURE_OPTION = "atm_pressure_options";
     public static final String WIND_OPTION = "atm_pressure_options";
     public static final String HUMIDITY_OPTION = "humidity_options";

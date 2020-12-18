@@ -20,6 +20,7 @@
     <string name="sunrise_extra_option">Время восхода</string>
     <string name="sunset_extra_option">Время заката</string>
     <string name="temp_extra_option">Температура</string>
+    <string name="feelslike_extra_option">Ощущается как</string>
     <string name="atm_pressure_extra_option">Атмосферное давление</string>
     <string name="humidity_option">Влажность, %</string>
     <string name="wind_option">Ветер</string>

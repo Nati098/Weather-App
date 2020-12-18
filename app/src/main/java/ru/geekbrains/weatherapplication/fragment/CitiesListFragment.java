@@ -2,7 +2,6 @@ package ru.geekbrains.weatherapplication.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,14 +25,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
@@ -41,6 +34,7 @@ import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
+import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
@@ -218,6 +212,9 @@ public class CitiesListFragment extends Fragment {
         }
     }
 
+    public void getWeather(CityListItem city, int requestMode) {
+        new Thread(new ApiDataReceiver(getContext(), city, requestMode)).start();
+    }
 
     private void handleWeather(CurrentWeatherRequest weatherRequest){
 
