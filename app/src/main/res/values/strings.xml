@@ -10,6 +10,7 @@
     <string name="show_forecast_yes">Go</string>
     <string name="button_ok">OK</string>
     <string name="button_retry">Retry</string>
+    <string name="button_back">Back</string>
 
     <string name="weather_info_title">%1$s\'s weather</string>
 

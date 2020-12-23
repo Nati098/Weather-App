@@ -15,7 +15,6 @@
         android:padding="8dp">
 
         <LinearLayout
-            android:id="@+id/weather_day_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -79,44 +78,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/frame_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/frame_error"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/text_view_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Error text"
-            style="@style/SubtitleTextStyle"/>
-
-        <Button
-            android:id="@+id/btn_ok_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_ok"
-            android:theme="@style/CustomTextButtonTheme"  />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

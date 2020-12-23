@@ -45,10 +45,6 @@ import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 public class CitiesListFragment extends Fragment {
     private static final String TAG = CitiesListFragment.class.getSimpleName();
 
-    private View mainFragment;
-    private View viewLoading;
-    private Button btnOkError;
-
     private TextInputEditText editTextCityName;
     private Button btnSeeWeather;
 
@@ -56,8 +52,6 @@ public class CitiesListFragment extends Fragment {
     private RecyclerView optionsRecycler;
 
     private OpenFragmentListener openFragmentListener;
-
-    private CityListItem city;  // city, which has been found in the 1st trying to load weather, saved here and is used in next try
 
 
     public static CitiesListFragment newInstance(String cityName, List<OptionItem> data) {
@@ -114,10 +108,6 @@ public class CitiesListFragment extends Fragment {
 
 
     private void bindView(View view) {
-        mainFragment = view.findViewById(R.id.weather_day_info);
-        viewLoading = view.findViewById(R.id.frame_loading);
-        btnOkError = view.findViewById(R.id.btn_ok_error);
-        btnOkError.setOnClickListener(v -> showStateView(State.HasData));
 
         editTextCityName = view.findViewById(R.id.city_name_edittext);
         editTextCityName.setFocusable(true);
@@ -135,7 +125,6 @@ public class CitiesListFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 validate(editTextCityName, getResources().getString(R.string.empty_city_name_error));
-                city = null;  // if we change smth, we should find city object by name again
             }
         });
 
@@ -146,7 +135,9 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
-                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> loadWeatherData()).show();
+                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
+                            openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString()));
+            }).show();
         });
 
         optionsRecycler = view.findViewById(R.id.recycler);
@@ -168,103 +159,6 @@ public class CitiesListFragment extends Fragment {
             view.setError(null);
             btnSeeWeather.setEnabled(true);
         }
-    }
-
-    private void loadWeatherData(){
-        showStateView(State.Loading);
-
-        if (city == null) {
-            city = findCityByName(editTextCityName.getText().toString());
-        }
-
-        if (city != null) {
-            if (DEBUG) {
-                Log.d(TAG, "found city:" + city);
-            }
-            getWeather(city.getCoord().getLat(), city.getCoord().getLon());
-        }
-        else {
-            if (DEBUG) {
-                Log.e(TAG, "Not found city");
-            }
-
-            showStateView(State.ErrorData);
-        }
-
-    }
-
-    private CityListItem findCityByName(String cityName) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getContext().getAssets().open(CITY_LIST_FILE_PATH)));
-
-            List<CityListItem> cities = new Gson().fromJson(reader, new TypeToken<List<CityListItem>>() {}.getType());
-
-            CityListItem res = cities.stream()
-                    .filter(city -> cityName.equals(city.getName()))
-                    .findAny().orElse(null);
-
-            reader.close();
-            return res;
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public void getWeather(CityListItem city, int requestMode) {
-        new Thread(new ApiDataReceiver(getContext(), city, requestMode)).start();
-    }
-
-    private void handleWeather(CurrentWeatherRequest weatherRequest){
-
-        String cityName = weatherRequest.getName();
-        float temp = weatherRequest.getMain().getTemp();
-
-        showStateView(State.HasData);
-        openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(weatherRequest));
-    }
-
-    private void handleError(){
-        showStateView(State.ErrorData);
-    }
-
-    private void showStateView(@NonNull State state){
-        switch (state){
-            case HasData:
-                viewLoading.setVisibility(View.GONE);
-
-                mainFragment.setVisibility(View.VISIBLE);
-                break;
-
-            case Loading:
-                mainFragment.setVisibility(View.GONE);
-
-                viewLoading.setVisibility(View.VISIBLE);
-                break;
-
-            case ErrorData:
-                viewLoading.setVisibility(View.GONE);
-                mainFragment.setVisibility(View.GONE);
-
-                createAlertDialog(getText(R.string.cannot_load_info_error));
-                break;
-
-            default:
-                throw new IllegalArgumentException("Wrong state: " + state);
-        }
-
-    }
-
-    private void createAlertDialog(CharSequence errorMsg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(R.string.error_title)
-                .setMessage(errorMsg)
-                .setIcon(R.drawable.ic_zip)
-                .setCancelable(true)
-                .setNegativeButton(R.string.button_retry,
-                        (dialog, id) -> loadWeatherData())
-                .setPositiveButton(R.string.button_ok, (dialog, id) -> { });
     }
 
 }
