@@ -37,7 +37,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
 
-public class WeatherInfoFragment extends Fragment implements BaseFragment {
+public class WeatherInfoFragment extends BaseFragment {
     private static final String TAG = WeatherInfoFragment.class.getSimpleName();
 
     private static final String ADDRESS_WEATHER = "https://www.gismeteo.ru/";
