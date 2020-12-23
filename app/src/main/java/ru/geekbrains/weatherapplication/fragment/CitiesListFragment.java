@@ -136,7 +136,7 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
                         R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
-                            openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString()));
+                            openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
             }).show();
         });
 

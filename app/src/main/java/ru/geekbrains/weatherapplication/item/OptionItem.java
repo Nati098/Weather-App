@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class OptionItem implements Serializable {
     private String id = "";
     private String label;
+    private String value = "";
     private boolean isActive;
 
     public OptionItem(String id, String label, boolean isActive) {
@@ -27,5 +28,13 @@ public class OptionItem implements Serializable {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

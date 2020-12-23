@@ -24,7 +24,6 @@ import static ru.geekbrains.weatherapplication.service.WebApiService.WEATHER_REQ
 
 public class ApiDataReceiver extends Observable implements Runnable {
     private static final String TAG = ApiDataReceiver.class.getSimpleName();
-    private static final float ABSOLUTE_ZERO = 273.15f;
 
     private Fragment fragment;
     private final Observer observer;

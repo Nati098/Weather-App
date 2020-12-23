@@ -32,9 +32,11 @@ import java.util.Observable;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
+import ru.geekbrains.weatherapplication.data.Constants;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
+import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
@@ -46,6 +48,7 @@ import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
+import static ru.geekbrains.weatherapplication.data.Constants.getFormattedExtraInfo;
 
 
 public class WeatherInfoFragment extends BaseFragment {
@@ -70,11 +73,12 @@ public class WeatherInfoFragment extends BaseFragment {
     private Button btnMoreInfo;
 
     private String cityName;
+    private List<OptionItem> options;
 
-    public static WeatherInfoFragment newInstance(String cityName) {
+    public static WeatherInfoFragment newInstance(String cityName, List<OptionItem> options) {
         WeatherInfoFragment fragment = new WeatherInfoFragment();
         Bundle args = new Bundle();
-        args.putSerializable(WEATHER_OPTIONS, new Parcel(cityName, new ArrayList<>()));
+        args.putSerializable(WEATHER_OPTIONS, new Parcel(cityName, options));
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,6 +101,7 @@ public class WeatherInfoFragment extends BaseFragment {
         }
 
         cityName = parcel.cityName;
+        options = parcel.options;
         loadWeatherData(findCityByName(parcel.cityName));
 
 //        if (parcel == null) {
@@ -147,8 +152,8 @@ public class WeatherInfoFragment extends BaseFragment {
         });
     }
 
-    private void setupRecycler(View view, List<OptionItem> options) {
-        extraInfoAdapter = new CurrentWeatherExtraAdapter(view.getContext(), generateExtraInfoList(options), (adapterView, v, i, l) -> { });
+    private void setupRecycler(View view, List<CurrentWeatherExtraItem> options) {
+        extraInfoAdapter = new CurrentWeatherExtraAdapter(view.getContext(), options, (adapterView, v, i, l) -> { });
         extraInfoRecycler.setAdapter(extraInfoAdapter);
         extraInfoRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -156,41 +161,6 @@ public class WeatherInfoFragment extends BaseFragment {
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
                 generateWeatherWeekList(), (adapterView, v, i, l) -> { });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
-    }
-
-    public List<CurrentWeatherExtraItem> generateExtraInfoList(List<OptionItem> options) {
-        List<CurrentWeatherExtraItem> data = new ArrayList<>();
-
-        options.forEach(optionItem -> {
-            if (optionItem.isActive()) {
-                data.add(new CurrentWeatherExtraItem(R.drawable.ic_temp_normal,
-                        optionItem.getLabel(),
-                        String.format("%d%s", 7,getString(R.string.temperature_unit))));
-            }
-        });
-
-        return data;
-    }
-
-    public List<WeatherItem> generateWeatherDayList() {
-        List<WeatherItem> data = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            data.add(new WeatherItem(getString(R.string.time_dummy), R.drawable.ic_rainy_moon, i+7));
-        }
-        return data;
-    }
-
-    public List<WeatherItem> generateWeatherWeekList() {
-        List<WeatherItem> data = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            data.add(new WeatherItem(getString(R.string.sunday), R.drawable.ic_cloudy, i+7));
-        }
-        return data;
-    }
-
-    @Override
-    void updateView(MainRequest data) {
-
     }
 
     private void loadWeatherData(CityListItem city) {
@@ -279,17 +249,23 @@ public class WeatherInfoFragment extends BaseFragment {
             MainRequest mainReq = ((ApiDataReceiver) o).getWeatherRequest();
 
             if (mainReq instanceof CurrentWeatherRequest) {
-                updateCurrentWeather((CurrentWeatherRequest)mainReq);
+                CurrentWeatherRequest weatherRequest = (CurrentWeatherRequest) mainReq;
+                updateCurrentWeather(cityName,
+                        weatherRequest.getWeather()[0].getIcon(),
+                        getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp())));
 
-
-                setupRecycler();
+                setupRecycler(getView(), new ArrayList<>());
+                btnMoreInfo.setEnabled(true);
             }
             else if (mainReq instanceof WeekWeatherRequest) {
+                WeekWeatherRequest weatherRequest = (WeekWeatherRequest) mainReq;
+                updateCurrentWeather(cityName,
+                        weatherRequest.getCurrent().getWeather()[0].getIcon(), getString(R.string.weather_info_title,
+                        String.format("%f2", weatherRequest.getCurrent().getTemp())));
 
-
-
-                setupRecycler();
+                setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()));
                 weatherWeekRecycler.setVisibility(View.VISIBLE);
+                btnMoreInfo.setEnabled(true);
             }
 
 
@@ -297,12 +273,36 @@ public class WeatherInfoFragment extends BaseFragment {
 
     }
 
-    public void updateCurrentWeather(CurrentWeatherRequest weatherRequest) {
-        toolbar.setTitle(weatherRequest.getName());
-
-        String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
-        tempTextView.setText(title);
+    public void updateCurrentWeather(String title, String icon, String temp) {
+        toolbar.setTitle(title);
+        tempTextView.setText(temp);
+        imageWeather.setImageResource(Constants.getWeatherImage(icon));
     }
 
+    private List<CurrentWeatherExtraItem> prepareListOptions(CurrentWeather newData) {
+        List<CurrentWeatherExtraItem> data = new ArrayList<>();
+
+        options.forEach(optionItem -> {
+            if (optionItem.isActive()) {
+                data.add(new CurrentWeatherExtraItem(R.drawable.ic_temp_normal,
+                        optionItem.getLabel(), getFormattedExtraInfo(optionItem, newData)));
+            }
+        });
+
+        return data;
+    }
+
+    public List<WeatherItem> generateWeatherWeekList() {
+        List<WeatherItem> data = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            data.add(new WeatherItem(getString(R.string.sunday), R.drawable.ic_cloudy, i+7));
+        }
+        return data;
+    }
+
+    @Override
+    void updateView(MainRequest data) {
+
+    }
 
 }
