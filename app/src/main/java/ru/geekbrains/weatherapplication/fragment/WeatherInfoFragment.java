@@ -37,6 +37,7 @@ import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
+import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -144,13 +145,6 @@ public class WeatherInfoFragment extends BaseFragment {
                 getActivity().startActivity(intent);
             }
         });
-    }
-
-    public void updateView(CurrentWeatherRequest weatherRequest) {
-        toolbar.setTitle(weatherRequest.getName());
-
-        String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
-        tempTextView.setText(title);
     }
 
     private void setupRecycler(View view, List<OptionItem> options) {
@@ -282,11 +276,33 @@ public class WeatherInfoFragment extends BaseFragment {
     @Override
     public void update(Observable observable, Object o) {
         if (o instanceof ApiDataReceiver) {
-            ApiDataReceiver data = (ApiDataReceiver) o;
+            MainRequest mainReq = ((ApiDataReceiver) o).getWeatherRequest();
 
+            if (mainReq instanceof CurrentWeatherRequest) {
+                updateCurrentWeather((CurrentWeatherRequest)mainReq);
+
+
+                setupRecycler();
+            }
+            else if (mainReq instanceof WeekWeatherRequest) {
+
+
+
+                setupRecycler();
+                weatherWeekRecycler.setVisibility(View.VISIBLE);
+            }
 
 
         }
 
     }
+
+    public void updateCurrentWeather(CurrentWeatherRequest weatherRequest) {
+        toolbar.setTitle(weatherRequest.getName());
+
+        String title = getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp()));
+        tempTextView.setText(title);
+    }
+
+
 }

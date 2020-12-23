@@ -13,6 +13,7 @@ import java.util.Observer;
 
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 
 import static androidx.core.app.JobIntentService.enqueueWork;
@@ -30,6 +31,8 @@ public class ApiDataReceiver extends Observable implements Runnable {
 
     private CityListItem city;
     private int requestMode;
+
+    private MainRequest weatherRequest;
 
     public ApiDataReceiver(Fragment fragment, Observer observer, CityListItem city, int requestMode) {
         this.fragment = fragment;
@@ -56,18 +59,17 @@ public class ApiDataReceiver extends Observable implements Runnable {
         enqueueWork(fragment.getContext(), WebApiService.class, 225, intentForService);
     }
 
+    public MainRequest getWeatherRequest() {
+        return weatherRequest;
+    }
+
     private void update (Object data) {
         if (data != null) {
             if (data instanceof CurrentWeatherRequest) {
-                CurrentWeatherRequest weatherRequest = (CurrentWeatherRequest) data;
-
-
+                weatherRequest = (CurrentWeatherRequest) data;
             }
             else if (data instanceof WeekWeatherRequest) {
-                WeekWeatherRequest weekWeatherRequest = (WeekWeatherRequest) data;
-
-
-
+                weatherRequest = (WeekWeatherRequest) data;
             }
             else {
                 if (DEBUG) {
