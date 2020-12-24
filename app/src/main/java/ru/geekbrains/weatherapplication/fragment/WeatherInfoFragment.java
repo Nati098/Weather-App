@@ -37,6 +37,7 @@ import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
+import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
@@ -292,9 +293,9 @@ public class WeatherInfoFragment extends BaseFragment {
         return data;
     }
 
-    public List<WeatherItem> generateWeatherWeekList() {
+    public List<WeatherItem> generateWeatherWeekList(DailyWeather[] newData ) {
         List<WeatherItem> data = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < newData.length; i++) {
             data.add(new WeatherItem(getString(R.string.sunday), R.drawable.ic_cloudy, i+7));
         }
         return data;

@@ -9,6 +9,7 @@ import ru.geekbrains.weatherapplication.BaseAppActivity;
 public class SystemPreferences {
     private static String SYSTEM_PREFERENCES = "system_preferences";
 
+    public static final String LAST_REQUESTED_CITY = "is_night_mode";
     public static final String IS_NIGHT_MODE = "is_night_mode";
 
 
@@ -18,6 +19,14 @@ public class SystemPreferences {
 
     public static boolean getBooleanPreference(String key) {
         return getSP().getBoolean(key, false);
+    }
+
+    public static String getStringPreference(String key) {
+        return getSP().getString(key, "");
+    }
+
+    public static void setPreference(String key, String value) {
+        getSP().edit().putString(key, value).apply();
     }
 
     public static void setPreference(String key, boolean value) {

@@ -31,6 +31,7 @@ import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
+import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
@@ -110,6 +111,7 @@ public class CitiesListFragment extends Fragment {
     private void bindView(View view) {
 
         editTextCityName = view.findViewById(R.id.city_name_edittext);
+        editTextCityName.setText(SystemPreferences.getStringPreference(SystemPreferences.LAST_REQUESTED_CITYModel));
         editTextCityName.setFocusable(true);
         editTextCityName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,6 +138,7 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
                         R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
+                            SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, editTextCityName.getText().toString());
                             openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
             }).show();
         });
