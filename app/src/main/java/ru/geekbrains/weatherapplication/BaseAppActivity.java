@@ -11,14 +11,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +30,7 @@ import java.util.List;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
 import ru.geekbrains.weatherapplication.item.OptionItem;
+import ru.geekbrains.weatherapplication.service.CustomFirebaseMessagingService;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.*;
@@ -33,6 +38,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 
 public class BaseAppActivity extends AppCompatActivity implements OpenFragmentListener, NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = BaseAppActivity.class.getSimpleName();
     private static final int SETTINGS_CODE = 88;
 
     private static Context context;
@@ -50,6 +56,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         setContentView(R.layout.activity_base_app);
 
         bindView();
+        initGetToken();
+        initNotificationChannel();
 
         addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
     }
@@ -68,6 +76,32 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         NavigationView navigationView = findViewById(R.id.nav_view_baseapp);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void initGetToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "PushMessage -> getInstanceId failed", task.getException());
+                        return;
+                    }
+
+                    String token = task.getResult().getToken();
+                    if (DEBUG) {
+                        Log.d(TAG, "PushMessage -> got token="+token);
+                    }
+                });
+    }
+
+    private void initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("2", "name", importance);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
