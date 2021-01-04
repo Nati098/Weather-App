@@ -4,9 +4,11 @@ import android.os.Parcel;
 
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
+import ru.geekbrains.weatherapplication.data.dto.Main;
+import ru.geekbrains.weatherapplication.data.dto.Weather;
 
 
-public class WeekWeatherRequest implements MainRequest {
+public class WeekWeatherRequest implements WeatherRequest {
 
     private CurrentWeather current;
     private DailyWeather daily;
@@ -29,6 +31,16 @@ public class WeekWeatherRequest implements MainRequest {
             return new CurrentWeatherRequest[size];
         }
     };
+
+    @Override
+    public Weather getFirstWeather() {
+        return current.getWeather()[0];
+    }
+
+    @Override
+    public Main getMain() {
+        return null;
+    }
 
     public CurrentWeather getCurrent() {
         return current;

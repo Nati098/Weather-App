@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.geekbrains.weatherapplication.BuildConfig;
+import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
@@ -103,19 +105,12 @@ public class WebApiService extends JobIntentService {
 
     private void convertAndBroadcast(String result) {
         Gson gson = new Gson();
-
-        if (requestMode == 0) {
-            final CurrentWeatherRequest weatherRequest = gson.fromJson(result, CurrentWeatherRequest.class);
-            sendBroadcast(weatherRequest);
-        }
-        else {
-            final WeekWeatherRequest weatherRequest = gson.fromJson(result, WeekWeatherRequest.class);
-            sendBroadcast(weatherRequest);
-        }
+        final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+        sendBroadcast(weatherRequest);
 
     }
 
-    private void sendBroadcast (MainRequest result) {
+    private void sendBroadcast (WeatherRequest result) {
         Intent broadcastIntent = new Intent(WEATHER_REQUEST_RESULT);
         broadcastIntent.putExtra(WEATHER_REQUEST_RESULT, result);
         sendBroadcast(broadcastIntent);

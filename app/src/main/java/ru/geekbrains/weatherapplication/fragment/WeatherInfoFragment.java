@@ -39,6 +39,7 @@ import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
@@ -104,22 +105,6 @@ public class WeatherInfoFragment extends BaseFragment {
         options = parcel.options;
         loadWeatherData(findCityByName(parcel.cityName));
 
-//        if (parcel == null) {
-//            Toast.makeText(getContext(), getString(R.string.cannot_load_info_error), Toast.LENGTH_LONG);
-//        }
-//        else {
-//            String title = getString(R.string.weather_info_title, parcel.cityName);
-//            if (DEBUG) {
-//                Log.d("WeatherInfoFragment", "title = " + title);
-//            }
-//            toolbar.setTitle(title);
-//
-//            imageWeather.setImageResource(Constants.getWeatherImage(parcel.icon));
-//
-//            setupRecycler(view, parcel.options);
-//            btnMoreInfo.setEnabled(true);
-//        }
-
     }
 
     @Override
@@ -161,6 +146,7 @@ public class WeatherInfoFragment extends BaseFragment {
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
                 generateWeatherWeekList(), (adapterView, v, i, l) -> { });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
+        weatherWeekRecycler.setVisibility(options.isEmpty() ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void loadWeatherData(CityListItem city) {
@@ -248,27 +234,13 @@ public class WeatherInfoFragment extends BaseFragment {
         if (o instanceof ApiDataReceiver) {
             MainRequest mainReq = ((ApiDataReceiver) o).getWeatherRequest();
 
-            if (mainReq instanceof CurrentWeatherRequest) {
-                CurrentWeatherRequest weatherRequest = (CurrentWeatherRequest) mainReq;
-                updateCurrentWeather(cityName,
-                        weatherRequest.getWeather()[0].getIcon(),
-                        getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp())));
+            WeatherRequest weatherRequest = (WeatherRequest) mainReq;
+            updateCurrentWeather(cityName,
+                    weatherRequest.getFirstWeather().getIcon(),
+                    getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp())));
 
-                setupRecycler(getView(), new ArrayList<>());
-                btnMoreInfo.setEnabled(true);
-            }
-            else if (mainReq instanceof WeekWeatherRequest) {
-                WeekWeatherRequest weatherRequest = (WeekWeatherRequest) mainReq;
-                updateCurrentWeather(cityName,
-                        weatherRequest.getCurrent().getWeather()[0].getIcon(), getString(R.string.weather_info_title,
-                        String.format("%f2", weatherRequest.getCurrent().getTemp())));
-
-                setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()));
-                weatherWeekRecycler.setVisibility(View.VISIBLE);
-                btnMoreInfo.setEnabled(true);
-            }
-
-
+            setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()));
+            btnMoreInfo.setEnabled(true);
         }
 
     }

@@ -4,12 +4,13 @@ import android.os.Parcel;
 
 import ru.geekbrains.weatherapplication.data.dto.Clouds;
 import ru.geekbrains.weatherapplication.data.dto.Coordinates;
+import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.dto.Main;
 import ru.geekbrains.weatherapplication.data.dto.Wind;
 
 
-public class CurrentWeatherRequest implements MainRequest {
+public class CurrentWeatherRequest implements WeatherRequest {
     private Coordinates coord;
     private Weather[] weather;
     private Main main;
@@ -56,8 +57,18 @@ public class CurrentWeatherRequest implements MainRequest {
         this.weather = weather;
     }
 
+    @Override
+    public Weather getFirstWeather() {
+        return weather[0];
+    }
+
     public Main getMain() {
         return main;
+    }
+
+    @Override
+    public CurrentWeather getCurrent() {
+        return null;
     }
 
     public void setMain(Main main) {

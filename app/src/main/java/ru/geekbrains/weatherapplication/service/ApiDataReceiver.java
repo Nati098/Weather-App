@@ -71,17 +71,13 @@ public class ApiDataReceiver extends Observable implements Runnable {
                 weatherRequest = (WeekWeatherRequest) data;
             }
             else {
-                if (DEBUG) {
-                    Log.e(TAG, "UNKNOWN CLASS OF DATA");
-                }
+                Log.e(TAG, "UNKNOWN CLASS OF DATA");
             }
 
             observer.update(this, this);
         }
         else {
-            if (DEBUG) {
-                Log.e(TAG, "PARCELABLE DATA IS NULL");
-            }
+            Log.e(TAG, "PARCELABLE DATA IS NULL");
         }
     }
 
