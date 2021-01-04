@@ -107,7 +107,6 @@ public class WebApiService extends JobIntentService {
         Gson gson = new Gson();
         final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
         sendBroadcast(weatherRequest);
-
     }
 
     private void sendBroadcast (WeatherRequest result) {
