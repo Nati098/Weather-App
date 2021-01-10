@@ -28,7 +28,7 @@
 
     <string name="temperature">Температура</string>
     <string name="week_forecast_title">Прогоноз на след.дни</string>
-    <string name="more_info_btn">Больше информации</string>
+    <string name="more_info_btn">Посмотреть больше информации</string>
 
     <string name="monday">Пн</string>
     <string name="tuesday">Вт</string>

@@ -5,6 +5,7 @@ import android.os.Parcel;
 import ru.geekbrains.weatherapplication.data.dto.Clouds;
 import ru.geekbrains.weatherapplication.data.dto.Coordinates;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
+import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
 import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.dto.Main;
 import ru.geekbrains.weatherapplication.data.dto.Wind;
@@ -68,6 +69,11 @@ public class CurrentWeatherRequest implements WeatherRequest {
 
     @Override
     public CurrentWeather getCurrent() {
+        return null;
+    }
+
+    @Override
+    public DailyWeather[] getDaily() {
         return null;
     }
 

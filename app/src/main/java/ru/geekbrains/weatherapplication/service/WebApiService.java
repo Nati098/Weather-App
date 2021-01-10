@@ -58,9 +58,6 @@ public class WebApiService extends JobIntentService {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setConnectTimeout(5000);
                 urlConnection.setReadTimeout(5000);
-//                if (DEBUG) {
-//                    Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
-//                }
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 String result = in.lines().collect(Collectors.joining("\n"));
@@ -115,7 +112,9 @@ public class WebApiService extends JobIntentService {
     }
 
     private void convertAndBroadcast(String result) {
-        Log.d(TAG, "convertAndBroadcast: "+result);
+        if (DEBUG) {
+            Log.d(TAG, "convertAndBroadcast: " + result);
+        }
         WeatherRequest weatherRequest = new Gson().fromJson(result, CurrentWeatherRequest.class);
         sendBroadcast(weatherRequest);
     }

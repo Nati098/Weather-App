@@ -11,7 +11,7 @@ import ru.geekbrains.weatherapplication.item.OptionItem;
 
 
 public class Constants {
-    private static final float ABSOLUTE_ZERO = 273.15f;
+    public static final float ABSOLUTE_ZERO = 273.15f;
 
     public static final String CITY_LIST_FILE_PATH = "city.list.json";
 

@@ -11,13 +11,13 @@ import ru.geekbrains.weatherapplication.data.dto.Weather;
 public class WeekWeatherRequest implements WeatherRequest {
 
     private CurrentWeather current;
-    private DailyWeather daily;
+    private DailyWeather[] daily;
 
     public WeekWeatherRequest() {}
 
     public WeekWeatherRequest(Parcel in) {
         current = in.readParcelable(CurrentWeather.class.getClassLoader());
-        daily = in.readParcelable(DailyWeather.class.getClassLoader());
+        daily = in.createTypedArray(DailyWeather.CREATOR);
     }
 
     public static final Creator<CurrentWeatherRequest> CREATOR = new Creator<CurrentWeatherRequest>() {
@@ -50,11 +50,11 @@ public class WeekWeatherRequest implements WeatherRequest {
         this.current = current;
     }
 
-    public DailyWeather getDaily() {
+    public DailyWeather[] getDaily() {
         return daily;
     }
 
-    public void setDaily(DailyWeather daily) {
+    public void setDaily(DailyWeather[] daily) {
         this.daily = daily;
     }
 
@@ -66,6 +66,6 @@ public class WeekWeatherRequest implements WeatherRequest {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeParcelable(current,0);
-        parcel.writeParcelable(daily,0);
+        parcel.writeTypedArray(daily,0);
     }
 }
