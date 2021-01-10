@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,10 +35,8 @@ import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
-import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
-import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
@@ -188,7 +184,7 @@ public class WeatherInfoFragment extends BaseFragment {
     }
 
     public void getWeather(CityListItem city, int requestMode) {
-        new Thread(new ApiDataReceiver(this, this, city, requestMode)).start();
+        new Thread(new ApiDataReceiver(getContext(), this, city, requestMode)).start();
     }
 
     private void showStateView(@NonNull State state){
@@ -231,6 +227,7 @@ public class WeatherInfoFragment extends BaseFragment {
 
     @Override
     public void update(Observable observable, Object o) {
+        Log.d(TAG, "update update update");
         if (o instanceof ApiDataReceiver) {
             MainRequest mainReq = ((ApiDataReceiver) o).getWeatherRequest();
 
@@ -274,7 +271,7 @@ public class WeatherInfoFragment extends BaseFragment {
 
     @Override
     void updateView(MainRequest data) {
-
+        Log.e(TAG, "updateView, object data instanceof "+data.getClass().getSimpleName());
     }
 
 }

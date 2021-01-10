@@ -7,9 +7,19 @@ import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.stream.Collectors;
@@ -17,20 +27,18 @@ import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.geekbrains.weatherapplication.BuildConfig;
-import ru.geekbrains.weatherapplication.data.dto.Weather;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
-import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
-import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
+
 
 public class WebApiService extends JobIntentService {
     private static final String TAG = WebApiService.class.getSimpleName();
 
     public static final String WEATHER_REQUEST_MODE = "weather_request_mode";
     public static final String WEATHER_REQUEST_RESULT = "weather_request_result";
-    public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
+    public static final String GET_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?";
     public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?";
 
     private int requestMode;
@@ -38,6 +46,9 @@ public class WebApiService extends JobIntentService {
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
         String requestUrl = buildRequestUrl(intent);
+        if (DEBUG) {
+            Log.d(TAG, "Request url : "+requestUrl);
+        }
         try {
             final URL uri = new URL(requestUrl);
 
@@ -47,9 +58,9 @@ public class WebApiService extends JobIntentService {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setConnectTimeout(5000);
                 urlConnection.setReadTimeout(5000);
-                if (DEBUG) {
-                    Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
-                }
+//                if (DEBUG) {
+//                    Log.d(TAG, "Connection response code: : "+urlConnection.getResponseCode());
+//                }
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 String result = in.lines().collect(Collectors.joining("\n"));
@@ -80,8 +91,8 @@ public class WebApiService extends JobIntentService {
 
     private String buildRequestUrl(Intent intent) {
         StringBuilder requestUrl = new StringBuilder(GET_WEATHER_URL);
-        requestUrl.append("lat=").append(intent.getStringExtra("lat"))
-                .append("&lon=").append(intent.getStringExtra("lon"))
+        requestUrl.append("lat=").append(intent.getFloatExtra("lat", 0.0f))
+                .append("&lon=").append(intent.getFloatExtra("lon", 0.0f))
                 .append("&exclude=");
 
         requestMode = intent.getIntExtra(WEATHER_REQUEST_MODE, 0);
@@ -104,8 +115,8 @@ public class WebApiService extends JobIntentService {
     }
 
     private void convertAndBroadcast(String result) {
-        Gson gson = new Gson();
-        final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+        Log.d(TAG, "convertAndBroadcast: "+result);
+        WeatherRequest weatherRequest = new Gson().fromJson(result, CurrentWeatherRequest.class);
         sendBroadcast(weatherRequest);
     }
 
