@@ -11,6 +11,7 @@
     <string name="show_forecast_yes">Вперед</string>
     <string name="button_ok">ОК</string>
     <string name="button_retry">Попробовать снова</string>
+    <string name="button_back">Назад</string>
 
     <string name="weather_info_title">Погода в г.%1$s</string>
 
@@ -20,13 +21,14 @@
     <string name="sunrise_extra_option">Время восхода</string>
     <string name="sunset_extra_option">Время заката</string>
     <string name="temp_extra_option">Температура</string>
+    <string name="feelslike_extra_option">Ощущается как</string>
     <string name="atm_pressure_extra_option">Атмосферное давление</string>
     <string name="humidity_option">Влажность, %</string>
     <string name="wind_option">Ветер</string>
 
     <string name="temperature">Температура</string>
     <string name="week_forecast_title">Прогоноз на след.дни</string>
-    <string name="more_info_btn">Больше информации</string>
+    <string name="more_info_btn">Посмотреть больше информации</string>
 
     <string name="monday">Пн</string>
     <string name="tuesday">Вт</string>

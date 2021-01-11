@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/weather_day_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -27,7 +28,7 @@
                 app:tint="?android:textColorSecondary"/>
 
             <LinearLayout
-                android:id="@+id/weather_day_info"
+                android:id="@+id/weather_extra_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -53,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:backgroundTint="?backgroundRecyclerColor"
-                app:layout_constraintTop_toBottomOf="@id/weather_day_info">
+                app:layout_constraintTop_toBottomOf="@id/weather_extra_layout">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,5 +93,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <FrameLayout
+        android:id="@+id/frame_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
 </LinearLayout>

@@ -10,6 +10,7 @@
     <string name="show_forecast_yes">Go</string>
     <string name="button_ok">OK</string>
     <string name="button_retry">Retry</string>
+    <string name="button_back">Back</string>
 
     <string name="weather_info_title">%1$s\'s weather</string>
 
@@ -19,6 +20,7 @@
     <string name="sunrise_extra_option">Sunrise time</string>
     <string name="sunset_extra_option">Sunset time</string>
     <string name="temp_extra_option">Temperature</string>
+    <string name="feelslike_extra_option">Feels like</string>
     <string name="atm_pressure_extra_option">Atmospheric pressure</string>
     <string name="humidity_option">Humidity, %</string>
     <string name="wind_option">Wind</string>
@@ -27,7 +29,7 @@
     <string name="temperature_unit" translatable="false">°C</string>
 
     <string name="week_forecast_title">Forecast for the next days</string>
-    <string name="more_info_btn">More information</string>
+    <string name="more_info_btn">See information</string>
 
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>

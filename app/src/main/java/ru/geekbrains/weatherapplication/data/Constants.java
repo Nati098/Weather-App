@@ -1,11 +1,18 @@
 package ru.geekbrains.weatherapplication.data;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+
 import ru.geekbrains.weatherapplication.R;
+import ru.geekbrains.weatherapplication.data.dto.CityListItem;
+import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
+import ru.geekbrains.weatherapplication.item.OptionItem;
 
 
 public class Constants {
-    public static final String GET_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
-    public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall?";
+    public static final float ABSOLUTE_ZERO = 273.15f;
+
     public static final String CITY_LIST_FILE_PATH = "city.list.json";
 
     public static final String WEATHER_OPTIONS = "weather_options";
@@ -13,8 +20,9 @@ public class Constants {
     public static final String SUNRISE_TIME_OPTION = "sunrise_time_option";
     public static final String SUNSET_TIME_OPTION = "sunset_time_option";
     public static final String TEMPERATURE_OPTION = "temperature_options";
+    public static final String FEELSLIKE_OPTION = "feelslike_options";
     public static final String ATM_PRESSURE_OPTION = "atm_pressure_options";
-    public static final String WIND_OPTION = "atm_pressure_options";
+    public static final String WIND_OPTION = "wind_options";
     public static final String HUMIDITY_OPTION = "humidity_options";
 
     public static class LoggerMode {
@@ -55,6 +63,30 @@ public class Constants {
                 return R.drawable.ic_mist;
             default:
                 return R.drawable.ic_empty;
+        }
+    }
+
+    public static String getFormattedExtraInfo(OptionItem item, CurrentWeather newData) {
+        StringBuilder sb = new StringBuilder();
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+        Calendar calendar = Calendar.getInstance();
+
+        switch (item.getId()) {
+            case FEELSLIKE_OPTION:
+                return String.format(sb.append("%.0f ").append("°C").toString(), newData.getFeelsLike());
+            case SUNRISE_TIME_OPTION:
+                calendar.setTimeInMillis(newData.getSunrise());
+                return formatter.format(calendar.getTime());
+            case SUNSET_TIME_OPTION:
+                calendar.setTimeInMillis(newData.getSunset());
+                return formatter.format(calendar.getTime());
+            case ATM_PRESSURE_OPTION:
+                return String.format(sb.append("%d ").append("hPa").toString(), newData.getPressure());
+            case HUMIDITY_OPTION:
+                return String.format(sb.append("%d ").append("%%").toString(), newData.getHumidity());
+            case WIND_OPTION:
+            default:
+                return "";
         }
     }
 

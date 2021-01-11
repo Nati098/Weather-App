@@ -112,9 +112,9 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     public List<OptionItem> getWeatherExtraInfo() {
-        return Arrays.asList(new OptionItem(SUNRISE_TIME_OPTION, getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
+        return Arrays.asList(new OptionItem(FEELSLIKE_OPTION, getString(R.string.feelslike_extra_option), SystemPreferences.getBooleanPreference(FEELSLIKE_OPTION)),
+                new OptionItem(SUNRISE_TIME_OPTION, getString(R.string.sunrise_extra_option), SystemPreferences.getBooleanPreference(SUNRISE_TIME_OPTION)),
                 new OptionItem(SUNSET_TIME_OPTION, getString(R.string.sunset_extra_option), SystemPreferences.getBooleanPreference(SUNSET_TIME_OPTION)),
-                new OptionItem(TEMPERATURE_OPTION, getString(R.string.temp_extra_option), SystemPreferences.getBooleanPreference(TEMPERATURE_OPTION)),
                 new OptionItem(ATM_PRESSURE_OPTION, getString(R.string.atm_pressure_extra_option), SystemPreferences.getBooleanPreference(ATM_PRESSURE_OPTION)),
                 //new OptionItem(WIND_OPTION, getString(R.string.wind_option), SystemPreferences.getBooleanPreference(WIND_OPTION)),
                 new OptionItem(HUMIDITY_OPTION, getString(R.string.humidity_option), SystemPreferences.getBooleanPreference(HUMIDITY_OPTION)));
