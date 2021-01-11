@@ -9,7 +9,7 @@ import ru.geekbrains.weatherapplication.BaseAppActivity;
 public class SystemPreferences {
     private static String SYSTEM_PREFERENCES = "system_preferences";
 
-    public static final String LAST_REQUESTED_CITY = "is_night_mode";
+    public static final String LAST_REQUESTED_CITY = "last_requested_city";
     public static final String IS_NIGHT_MODE = "is_night_mode";
 
 

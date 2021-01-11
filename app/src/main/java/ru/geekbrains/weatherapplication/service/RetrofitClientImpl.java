@@ -4,10 +4,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ru.geekbrains.weatherapplication.data.Constants.GET_WEEK_WEATHER_URL;
+
 
 public class RetrofitClientImpl {
-    public static final String GET_WEATHER_URL = "https://api.openweathermap.org/data/2.5/";
-    public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/";
     private static Retrofit retrofit;
 
     public static Retrofit getInstance() {

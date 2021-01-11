@@ -98,6 +98,9 @@ public class CitiesListFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        String cityName = (editTextCityName.getText() == null) ? "" : editTextCityName.getText().toString();
+        SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, cityName);
+
         Parcel parcel = new Parcel(editTextCityName.getText().toString(), optionsAdapter.getData());
         outState.putSerializable(WEATHER_OPTIONS, parcel);
         if (DEBUG) {

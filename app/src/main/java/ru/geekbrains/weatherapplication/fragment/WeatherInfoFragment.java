@@ -276,7 +276,7 @@ public class WeatherInfoFragment extends BaseFragment {
 
     public void updateCurrentWeather(String title, String icon, String temp) {
         toolbar.setTitle(title);
-        tempTextView.setText(temp);
+        tempTextView.setText(temp+" "+getString(R.string.temperature_unit));
         imageWeather.setImageResource(Constants.getWeatherImage(icon));
     }
 
