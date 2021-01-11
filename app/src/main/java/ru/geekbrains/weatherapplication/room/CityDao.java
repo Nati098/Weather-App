@@ -21,16 +21,16 @@ public interface CityDao {
     @Delete
     void deleteCity(CityEntity city);
 
-    @Query("SELECT COUNT() FROM city")
+    @Query("SELECT COUNT() FROM CityEntity")
     long getCountCities();
 
-    @Query("SELECT * FROM city")
+    @Query("SELECT * FROM CityEntity")
     List<CityEntity> getAllCities();
 
-    @Query("SELECT * FROM city WHERE id = :id")
+    @Query("SELECT * FROM CityEntity WHERE id = :id")
     CityEntity getStudentById(long id);
 
-    @Query("DELETE FROM city WHERE id = :id")
+    @Query("DELETE FROM CityEntity WHERE id = :id")
     void deleteCityById(long id);
 
 }

@@ -35,7 +35,6 @@ import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
-import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
@@ -111,7 +110,7 @@ public class CitiesListFragment extends Fragment {
     private void bindView(View view) {
 
         editTextCityName = view.findViewById(R.id.city_name_edittext);
-        editTextCityName.setText(SystemPreferences.getStringPreference(SystemPreferences.LAST_REQUESTED_CITYModel));
+        editTextCityName.setText(SystemPreferences.getStringPreference(SystemPreferences.LAST_REQUESTED_CITY));
         editTextCityName.setFocusable(true);
         editTextCityName.addTextChangedListener(new TextWatcher() {
             @Override

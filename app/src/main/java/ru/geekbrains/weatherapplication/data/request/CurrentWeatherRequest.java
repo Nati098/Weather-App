@@ -1,6 +1,9 @@
 package ru.geekbrains.weatherapplication.data.request;
 
-import android.os.Parcel;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 
 import ru.geekbrains.weatherapplication.data.dto.Clouds;
 import ru.geekbrains.weatherapplication.data.dto.Coordinates;
@@ -11,36 +14,32 @@ import ru.geekbrains.weatherapplication.data.dto.Main;
 import ru.geekbrains.weatherapplication.data.dto.Wind;
 
 
-public class CurrentWeatherRequest implements WeatherRequest {
+public class CurrentWeatherRequest implements WeatherRequest{
+
+    @SerializedName("coord")
+    @Expose
     private Coordinates coord;
-    private Weather[] weather;
+
+    @SerializedName("weather")
+    @Expose
+    private ArrayList<Weather> weather;
+
+    @SerializedName("main")
+    @Expose
     private Main main;
+
+    @SerializedName("wind")
+    @Expose
     private Wind wind;
+
+    @SerializedName("clouds")
+    @Expose
     private Clouds clouds;
+
+    @SerializedName("name")
+    @Expose
     private String name;
 
-    public CurrentWeatherRequest() {}
-
-    public CurrentWeatherRequest(Parcel in) {
-        coord = in.readParcelable(Coordinates.class.getClassLoader());
-        weather = in.createTypedArray(Weather.CREATOR);
-        main = in.readParcelable(Main.class.getClassLoader());
-        wind = in.readParcelable(Wind.class.getClassLoader());
-        clouds = in.readParcelable(Clouds.class.getClassLoader());
-        name = in.readString();
-    }
-
-    public static final Creator<CurrentWeatherRequest> CREATOR = new Creator<CurrentWeatherRequest>() {
-        @Override
-        public CurrentWeatherRequest createFromParcel(Parcel in) {
-            return new CurrentWeatherRequest(in);
-        }
-
-        @Override
-        public CurrentWeatherRequest[] newArray(int size) {
-            return new CurrentWeatherRequest[size];
-        }
-    };
 
     public Coordinates getCoord() {
         return coord;
@@ -50,17 +49,17 @@ public class CurrentWeatherRequest implements WeatherRequest {
         this.coord = coord;
     }
 
-    public Weather[] getWeather() {
+    public ArrayList<Weather> getWeather() {
         return weather;
     }
 
-    public void setWeather(Weather[] weather) {
-        this.weather = weather;
+    public void setWeather(ArrayList<Weather> weather) {
+        this.weather = (ArrayList<Weather>) weather.clone();
     }
 
     @Override
     public Weather getFirstWeather() {
-        return weather[0];
+        return weather.get(0);
     }
 
     public Main getMain() {
@@ -73,7 +72,7 @@ public class CurrentWeatherRequest implements WeatherRequest {
     }
 
     @Override
-    public DailyWeather[] getDaily() {
+    public ArrayList<DailyWeather> getDaily() {
         return null;
     }
 
@@ -105,18 +104,4 @@ public class CurrentWeatherRequest implements WeatherRequest {
         this.name = name;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(coord,0);
-        parcel.writeTypedArray(weather, 0);
-        parcel.writeParcelable(main,0);
-        parcel.writeParcelable(wind,0);
-        parcel.writeParcelable(clouds,0);
-        parcel.writeString(name);
-    }
 }

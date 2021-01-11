@@ -1,28 +1,19 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class Wind implements Parcelable {
+
+public class Wind {
+
+    @SerializedName("speed")
+    @Expose
     private int speed;
+
+    @SerializedName("deg")
+    @Expose
     private int deg;
 
-    protected Wind(Parcel in) {
-        speed = in.readInt();
-        deg = in.readInt();
-    }
-
-    public static final Creator<Wind> CREATOR = new Creator<Wind>() {
-        @Override
-        public Wind createFromParcel(Parcel in) {
-            return new Wind(in);
-        }
-
-        @Override
-        public Wind[] newArray(int size) {
-            return new Wind[size];
-        }
-    };
 
     public int getDeg() {
         return deg;
@@ -40,15 +31,5 @@ public class Wind implements Parcelable {
         this.speed = speed;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(speed);
-        parcel.writeInt(deg);
-    }
 }
 

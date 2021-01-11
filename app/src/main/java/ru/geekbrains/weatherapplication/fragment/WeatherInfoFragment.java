@@ -27,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
 import ru.geekbrains.weatherapplication.adapter.WeatherWeekAdapter;
@@ -38,10 +42,12 @@ import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
-import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
+import ru.geekbrains.weatherapplication.service.ApiService;
+import ru.geekbrains.weatherapplication.service.RetrofitClientImpl;
 
 import static ru.geekbrains.weatherapplication.data.Constants.ABSOLUTE_ZERO;
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
@@ -73,6 +79,7 @@ public class WeatherInfoFragment extends BaseFragment {
 
     private String cityName;
     private List<OptionItem> options;
+
 
     public static WeatherInfoFragment newInstance(String cityName, List<OptionItem> options) {
         WeatherInfoFragment fragment = new WeatherInfoFragment();
@@ -187,7 +194,41 @@ public class WeatherInfoFragment extends BaseFragment {
     }
 
     public void getWeather(CityListItem city, int requestMode) {
-        new Thread(new ApiDataReceiver(getContext(), this, city, requestMode)).start();
+        StringBuilder excluded = new StringBuilder();
+        switch (requestMode) {
+            case 1:
+                excluded.append(Exclude.MINUTELY.description).append(",")
+                        .append(Exclude.HOURLY.description).append(",")
+                        .append(Exclude.ALERTS.description);
+                break;
+            default:
+                excluded.append(Exclude.MINUTELY.description).append(",")
+                        .append(Exclude.HOURLY.description).append(",")
+                        .append(Exclude.DAILY.description).append(",")
+                        .append(Exclude.ALERTS.description);
+                break;
+        }
+
+        ApiService service = RetrofitClientImpl.getInstance().create(ApiService.class);
+        service.getWeekWeather(city.getCoord().getLat(), city.getCoord().getLon(), excluded.toString(), BuildConfig.WEATHER_API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<WeekWeatherRequest>() {
+                    @Override
+                    public void onSuccess(WeekWeatherRequest weatherRequest) {
+                        updateView(weatherRequest);
+                        dispose();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showStateView(State.ErrorData);
+                        Log.e(TAG, e.toString());
+                        dispose();
+                    }
+                });
+
+
     }
 
     private void showStateView(@NonNull State state){
@@ -230,10 +271,7 @@ public class WeatherInfoFragment extends BaseFragment {
 
     @Override
     public void update(Observable observable, Object o) {
-        if (o instanceof ApiDataReceiver) {
-            updateView(((ApiDataReceiver) o).getWeatherRequest());
-        }
-
+        Log.d(TAG, "UPDATE UPDATE UPDATE");
     }
 
     public void updateCurrentWeather(String title, String icon, String temp) {
@@ -253,17 +291,17 @@ public class WeatherInfoFragment extends BaseFragment {
         return data;
     }
 
-    public List<WeatherItem> prepareWeatherWeekList(DailyWeather[] newData) {
+    public List<WeatherItem> prepareWeatherWeekList(ArrayList<DailyWeather> newData) {
         List<WeatherItem> data = new ArrayList<>();
 
         if (newData == null) {
             return data;
         }
 
-        for (int i = 0; i < newData.length; i++) {
+        for (int i = 0; i < newData.size(); i++) {
             data.add(new WeatherItem(getString(WeekDay.findByKey(i)),
-                    Constants.getWeatherImage(newData[i].getWeather()[0].getIcon()),
-                    (int) (newData[i].getTemp().getDay()-ABSOLUTE_ZERO)));
+                    Constants.getWeatherImage(newData.get(i).getWeather().get(0).getIcon()),
+                    (int) (newData.get(i).getTemp().getDay()-ABSOLUTE_ZERO)));
         }
         return data;
     }
@@ -285,6 +323,25 @@ public class WeatherInfoFragment extends BaseFragment {
         btnMoreInfo.setEnabled(true);
     }
 
+
+    private enum Exclude {
+        CURRENT("current"),
+        MINUTELY("minutely"),
+        HOURLY("hourly"),
+        DAILY("daily"),
+        ALERTS("alerts");
+
+
+        private final String description;
+
+        Exclude(String description) {
+            this.description = description;
+        }
+
+        public String toStr() {
+            return description;
+        }
+    }
 
     public enum WeekDay {
         MONDAY(0, R.string.monday),

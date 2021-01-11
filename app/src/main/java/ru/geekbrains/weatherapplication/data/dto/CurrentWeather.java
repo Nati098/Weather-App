@@ -1,42 +1,41 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 
 
-public class CurrentWeather implements Parcelable {
+public class CurrentWeather {
 
+    @SerializedName("sunrise")
+    @Expose
     private int sunrise;
+
+    @SerializedName("sunset")
+    @Expose
     private int sunset;
+
+    @SerializedName("temp")
+    @Expose
     private double temp;
+
+    @SerializedName("feels_like")
+    @Expose
     private double feelsLike;
+
+    @SerializedName("pressure")
+    @Expose
     private int pressure;
+
+    @SerializedName("humidity")
+    @Expose
     private int humidity;
-    private Weather[] weather;
 
-    public CurrentWeather() {}
+    @SerializedName("weather")
+    @Expose
+    private ArrayList<Weather> weather;
 
-    public CurrentWeather(Parcel in) {
-        sunrise = in.readInt();
-        sunset = in.readInt();
-        temp = in.readDouble();
-        feelsLike = in.readDouble();
-        pressure = in.readInt();
-        humidity = in.readInt();
-        weather = in.createTypedArray(Weather.CREATOR);
-    }
-
-    public static final Creator<CurrentWeather> CREATOR = new Creator<CurrentWeather>() {
-        @Override
-        public CurrentWeather createFromParcel(Parcel in) {
-            return new CurrentWeather(in);
-        }
-
-        @Override
-        public CurrentWeather[] newArray(int size) {
-            return new CurrentWeather[size];
-        }
-    };
 
     public int getSunrise() {
         return sunrise;
@@ -86,27 +85,11 @@ public class CurrentWeather implements Parcelable {
         this.humidity = humidity;
     }
 
-    public Weather[] getWeather() {
+    public ArrayList<Weather> getWeather() {
         return weather;
     }
 
-    public void setWeather(Weather[] weather) {
-        this.weather = weather;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(sunrise);
-        parcel.writeInt(sunset);
-        parcel.writeDouble(temp);
-        parcel.writeDouble(feelsLike);
-        parcel.writeInt(pressure);
-        parcel.writeInt(humidity);
-        parcel.writeTypedArray(weather, 0);
+    public void setWeather(ArrayList<Weather> weather) {
+        this.weather = (ArrayList<Weather>) weather.clone();
     }
 }

@@ -1,6 +1,6 @@
 package ru.geekbrains.weatherapplication.data.request;
 
-import android.os.Parcel;
+import java.util.ArrayList;
 
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
@@ -11,30 +11,12 @@ import ru.geekbrains.weatherapplication.data.dto.Weather;
 public class WeekWeatherRequest implements WeatherRequest {
 
     private CurrentWeather current;
-    private DailyWeather[] daily;
+    private ArrayList<DailyWeather> daily;
 
-    public WeekWeatherRequest() {}
-
-    public WeekWeatherRequest(Parcel in) {
-        current = in.readParcelable(CurrentWeather.class.getClassLoader());
-        daily = in.createTypedArray(DailyWeather.CREATOR);
-    }
-
-    public static final Creator<WeekWeatherRequest> CREATOR = new Creator<WeekWeatherRequest>() {
-        @Override
-        public WeekWeatherRequest createFromParcel(Parcel in) {
-            return new WeekWeatherRequest(in);
-        }
-
-        @Override
-        public WeekWeatherRequest[] newArray(int size) {
-            return new WeekWeatherRequest[size];
-        }
-    };
 
     @Override
     public Weather getFirstWeather() {
-        return current.getWeather()[0];
+        return current.getWeather().get(0);
     }
 
     @Override
@@ -50,22 +32,12 @@ public class WeekWeatherRequest implements WeatherRequest {
         this.current = current;
     }
 
-    public DailyWeather[] getDaily() {
+    public ArrayList<DailyWeather> getDaily() {
         return daily;
     }
 
-    public void setDaily(DailyWeather[] daily) {
-        this.daily = daily;
+    public void setDaily(ArrayList<DailyWeather> daily) {
+        this.daily = (ArrayList<DailyWeather>) daily.clone();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(current,0);
-        parcel.writeTypedArray(daily,0);
-    }
 }

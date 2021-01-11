@@ -1,30 +1,23 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class Main implements Parcelable {
+
+public class Main {
+
+    @SerializedName("temp")
+    @Expose
     private float temp;
+
+    @SerializedName("pressure")
+    @Expose
     private int pressure;
+
+    @SerializedName("humidity")
+    @Expose
     private int humidity;
 
-    protected Main(Parcel in) {
-        temp = in.readFloat();
-        pressure = in.readInt();
-        humidity = in.readInt();
-    }
-
-    public static final Creator<Main> CREATOR = new Creator<Main>() {
-        @Override
-        public Main createFromParcel(Parcel in) {
-            return new Main(in);
-        }
-
-        @Override
-        public Main[] newArray(int size) {
-            return new Main[size];
-        }
-    };
 
     public float getTemp() {
         return temp;
@@ -50,15 +43,4 @@ public class Main implements Parcelable {
         this.humidity = humidity;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeFloat(temp);
-        parcel.writeInt(pressure);
-        parcel.writeInt(humidity);
-    }
 }

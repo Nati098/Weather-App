@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = {"name", "lon", "lat", "temp"})})
+@Entity(indices = {@Index(value = {"name",  "state",  "country", "lon", "lat", "temp"})})
 public class CityEntity {
 
     @PrimaryKey(autoGenerate = true)
@@ -14,6 +14,12 @@ public class CityEntity {
 
     @ColumnInfo(name = "name")
     public String name;
+
+    @ColumnInfo(name = "state")
+    public String state;
+
+    @ColumnInfo(name = "country")
+    public String country;
 
     @ColumnInfo(name = "lon")
     public int lon;
