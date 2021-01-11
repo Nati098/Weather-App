@@ -20,15 +20,15 @@ public class WeekWeatherRequest implements WeatherRequest {
         daily = in.createTypedArray(DailyWeather.CREATOR);
     }
 
-    public static final Creator<CurrentWeatherRequest> CREATOR = new Creator<CurrentWeatherRequest>() {
+    public static final Creator<WeekWeatherRequest> CREATOR = new Creator<WeekWeatherRequest>() {
         @Override
-        public CurrentWeatherRequest createFromParcel(Parcel in) {
-            return new CurrentWeatherRequest(in);
+        public WeekWeatherRequest createFromParcel(Parcel in) {
+            return new WeekWeatherRequest(in);
         }
 
         @Override
-        public CurrentWeatherRequest[] newArray(int size) {
-            return new CurrentWeatherRequest[size];
+        public WeekWeatherRequest[] newArray(int size) {
+            return new WeekWeatherRequest[size];
         }
     };
 

@@ -244,10 +244,8 @@ public class WeatherInfoFragment extends BaseFragment {
 
     private List<CurrentWeatherExtraItem> prepareListOptions(CurrentWeather newData) {
         List<CurrentWeatherExtraItem> data = new ArrayList<>();
-
         options.forEach(optionItem -> {
             if (optionItem.isActive()) {
-                Log.d(TAG, "prepareListOptions, "+optionItem.getLabel()+" "+getFormattedExtraInfo(optionItem, newData));
                 data.add(new CurrentWeatherExtraItem(R.drawable.ic_temp_normal,
                         optionItem.getLabel(), getFormattedExtraInfo(optionItem, newData)));
             }
@@ -277,9 +275,10 @@ public class WeatherInfoFragment extends BaseFragment {
             Log.d(TAG, "updateView data: "+data);
         }
         WeatherRequest weatherRequest = (WeatherRequest) data;
+
         updateCurrentWeather(getString(R.string.weather_info_title, cityName),
                 weatherRequest.getFirstWeather().getIcon(),
-                String.format("%.0f", weatherRequest.getMain().getTemp()-ABSOLUTE_ZERO)
+                String.format("%.0f", weatherRequest.getCurrent().getTemp()-ABSOLUTE_ZERO)
         );
 
         setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()), prepareWeatherWeekList(weatherRequest.getDaily()));

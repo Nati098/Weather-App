@@ -29,6 +29,7 @@ import javax.net.ssl.HttpsURLConnection;
 import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
@@ -87,7 +88,7 @@ public class WebApiService extends JobIntentService {
     }
 
     private String buildRequestUrl(Intent intent) {
-        StringBuilder requestUrl = new StringBuilder(GET_WEATHER_URL);
+        StringBuilder requestUrl = new StringBuilder(GET_WEEK_WEATHER_URL);
         requestUrl.append("lat=").append(intent.getFloatExtra("lat", 0.0f))
                 .append("&lon=").append(intent.getFloatExtra("lon", 0.0f))
                 .append("&exclude=");
@@ -115,7 +116,7 @@ public class WebApiService extends JobIntentService {
         if (DEBUG) {
             Log.d(TAG, "convertAndBroadcast: " + result);
         }
-        WeatherRequest weatherRequest = new Gson().fromJson(result, CurrentWeatherRequest.class);
+        WeatherRequest weatherRequest = new Gson().fromJson(result, WeekWeatherRequest.class);
         sendBroadcast(weatherRequest);
     }
 
