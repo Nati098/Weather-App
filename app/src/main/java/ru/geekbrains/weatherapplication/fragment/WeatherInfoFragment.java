@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,14 +36,14 @@ import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
-import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.data.request.MainRequest;
-import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
+import ru.geekbrains.weatherapplication.data.request.WeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
 import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
 
+import static ru.geekbrains.weatherapplication.data.Constants.ABSOLUTE_ZERO;
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
@@ -105,22 +103,6 @@ public class WeatherInfoFragment extends BaseFragment {
         options = parcel.options;
         loadWeatherData(findCityByName(parcel.cityName));
 
-//        if (parcel == null) {
-//            Toast.makeText(getContext(), getString(R.string.cannot_load_info_error), Toast.LENGTH_LONG);
-//        }
-//        else {
-//            String title = getString(R.string.weather_info_title, parcel.cityName);
-//            if (DEBUG) {
-//                Log.d("WeatherInfoFragment", "title = " + title);
-//            }
-//            toolbar.setTitle(title);
-//
-//            imageWeather.setImageResource(Constants.getWeatherImage(parcel.icon));
-//
-//            setupRecycler(view, parcel.options);
-//            btnMoreInfo.setEnabled(true);
-//        }
-
     }
 
     @Override
@@ -153,15 +135,17 @@ public class WeatherInfoFragment extends BaseFragment {
         });
     }
 
-    private void setupRecycler(View view, List<CurrentWeatherExtraItem> options) {
+    private void setupRecycler(View view, List<CurrentWeatherExtraItem> options, List<WeatherItem>weatherWeekList) {
         extraInfoAdapter = new CurrentWeatherExtraAdapter(view.getContext(), options, (adapterView, v, i, l) -> { });
         extraInfoRecycler.setAdapter(extraInfoAdapter);
         extraInfoRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        extraInfoRecycler.setVisibility(options.isEmpty() ? View.INVISIBLE : View.VISIBLE);
 
         weatherWeekRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
         weatherWeekAdapter = new WeatherWeekAdapter(view.getContext(), R.layout.weather_week_item_list,
-                generateWeatherWeekList(), (adapterView, v, i, l) -> { });
+                weatherWeekList, (adapterView, v, i, l) -> { });
         weatherWeekRecycler.setAdapter(weatherWeekAdapter);
+        weatherWeekRecycler.setVisibility(weatherWeekList.isEmpty() ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void loadWeatherData(CityListItem city) {
@@ -203,7 +187,7 @@ public class WeatherInfoFragment extends BaseFragment {
     }
 
     public void getWeather(CityListItem city, int requestMode) {
-        new Thread(new ApiDataReceiver(this, this, city, requestMode)).start();
+        new Thread(new ApiDataReceiver(getContext(), this, city, requestMode)).start();
     }
 
     private void showStateView(@NonNull State state){
@@ -247,29 +231,7 @@ public class WeatherInfoFragment extends BaseFragment {
     @Override
     public void update(Observable observable, Object o) {
         if (o instanceof ApiDataReceiver) {
-            MainRequest mainReq = ((ApiDataReceiver) o).getWeatherRequest();
-
-            if (mainReq instanceof CurrentWeatherRequest) {
-                CurrentWeatherRequest weatherRequest = (CurrentWeatherRequest) mainReq;
-                updateCurrentWeather(cityName,
-                        weatherRequest.getWeather()[0].getIcon(),
-                        getString(R.string.weather_info_title, String.format("%f2", weatherRequest.getMain().getTemp())));
-
-                setupRecycler(getView(), new ArrayList<>());
-                btnMoreInfo.setEnabled(true);
-            }
-            else if (mainReq instanceof WeekWeatherRequest) {
-                WeekWeatherRequest weatherRequest = (WeekWeatherRequest) mainReq;
-                updateCurrentWeather(cityName,
-                        weatherRequest.getCurrent().getWeather()[0].getIcon(), getString(R.string.weather_info_title,
-                        String.format("%f2", weatherRequest.getCurrent().getTemp())));
-
-                setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()));
-                weatherWeekRecycler.setVisibility(View.VISIBLE);
-                btnMoreInfo.setEnabled(true);
-            }
-
-
+            updateView(((ApiDataReceiver) o).getWeatherRequest());
         }
 
     }
@@ -282,28 +244,78 @@ public class WeatherInfoFragment extends BaseFragment {
 
     private List<CurrentWeatherExtraItem> prepareListOptions(CurrentWeather newData) {
         List<CurrentWeatherExtraItem> data = new ArrayList<>();
-
         options.forEach(optionItem -> {
             if (optionItem.isActive()) {
                 data.add(new CurrentWeatherExtraItem(R.drawable.ic_temp_normal,
                         optionItem.getLabel(), getFormattedExtraInfo(optionItem, newData)));
             }
         });
-
         return data;
     }
 
-    public List<WeatherItem> generateWeatherWeekList(DailyWeather[] newData ) {
+    public List<WeatherItem> prepareWeatherWeekList(DailyWeather[] newData) {
         List<WeatherItem> data = new ArrayList<>();
+
+        if (newData == null) {
+            return data;
+        }
+
         for (int i = 0; i < newData.length; i++) {
-            data.add(new WeatherItem(getString(R.string.sunday), R.drawable.ic_cloudy, i+7));
+            data.add(new WeatherItem(getString(WeekDay.findByKey(i)),
+                    Constants.getWeatherImage(newData[i].getWeather()[0].getIcon()),
+                    (int) (newData[i].getTemp().getDay()-ABSOLUTE_ZERO)));
         }
         return data;
     }
 
     @Override
     void updateView(MainRequest data) {
+        showStateView(State.HasData);
+        if (DEBUG) {
+            Log.d(TAG, "updateView data: "+data);
+        }
+        WeatherRequest weatherRequest = (WeatherRequest) data;
 
+        updateCurrentWeather(getString(R.string.weather_info_title, cityName),
+                weatherRequest.getFirstWeather().getIcon(),
+                String.format("%.0f", weatherRequest.getCurrent().getTemp()-ABSOLUTE_ZERO)
+        );
+
+        setupRecycler(getView(), prepareListOptions(weatherRequest.getCurrent()), prepareWeatherWeekList(weatherRequest.getDaily()));
+        btnMoreInfo.setEnabled(true);
     }
 
+
+    public enum WeekDay {
+        MONDAY(0, R.string.monday),
+        TUESDAY(1, R.string.tuesday),
+        WEDNESDAY(2, R.string.wednesday),
+        THURSDAY(3, R.string.thursday),
+        FRIDAY(4, R.string.friday),
+        SATURDAY(5, R.string.saturday),
+        SUNDAY(6, R.string.sunday);
+
+        private int number;
+        private int stringCode;
+
+        WeekDay(int number, int stringCode) {
+            this.number = number;
+            this.stringCode = stringCode;
+        }
+
+        public int getCode() {
+            return stringCode;
+        }
+
+        public static int findByKey(int i) {
+            WeekDay[] weekDays = WeekDay.values();
+            int buf = i % 7;
+            for (WeekDay day : weekDays) {
+                if (day.number == buf) {
+                    return day.getCode();
+                }
+            }
+            return 0;
+        }
+    }
 }

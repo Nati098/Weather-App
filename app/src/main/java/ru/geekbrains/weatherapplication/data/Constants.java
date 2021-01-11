@@ -11,7 +11,7 @@ import ru.geekbrains.weatherapplication.item.OptionItem;
 
 
 public class Constants {
-    private static final float ABSOLUTE_ZERO = 273.15f;
+    public static final float ABSOLUTE_ZERO = 273.15f;
 
     public static final String CITY_LIST_FILE_PATH = "city.list.json";
 
@@ -71,9 +71,9 @@ public class Constants {
         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
         Calendar calendar = Calendar.getInstance();
 
-        switch (item.getLabel()) {
+        switch (item.getId()) {
             case FEELSLIKE_OPTION:
-                return String.format(sb.append("%.0f ").append("°C").toString(), newData.getFeelsLike() - ABSOLUTE_ZERO);
+                return String.format(sb.append("%.0f ").append("°C").toString(), newData.getFeelsLike());
             case SUNRISE_TIME_OPTION:
                 calendar.setTimeInMillis(newData.getSunrise());
                 return formatter.format(calendar.getTime());
@@ -81,9 +81,9 @@ public class Constants {
                 calendar.setTimeInMillis(newData.getSunset());
                 return formatter.format(calendar.getTime());
             case ATM_PRESSURE_OPTION:
-                return String.format(sb.append("%.1f ").append("hPa").toString(), newData.getPressure());
+                return String.format(sb.append("%d ").append("hPa").toString(), newData.getPressure());
             case HUMIDITY_OPTION:
-                return String.format(sb.append("%.1f ").append("%").toString(), newData.getHumidity());
+                return String.format(sb.append("%d ").append("%%").toString(), newData.getHumidity());
             case WIND_OPTION:
             default:
                 return "";

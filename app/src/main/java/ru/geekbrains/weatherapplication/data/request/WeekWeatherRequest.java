@@ -4,31 +4,43 @@ import android.os.Parcel;
 
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.data.dto.DailyWeather;
+import ru.geekbrains.weatherapplication.data.dto.Main;
+import ru.geekbrains.weatherapplication.data.dto.Weather;
 
 
-public class WeekWeatherRequest implements MainRequest {
+public class WeekWeatherRequest implements WeatherRequest {
 
     private CurrentWeather current;
-    private DailyWeather daily;
+    private DailyWeather[] daily;
 
     public WeekWeatherRequest() {}
 
     public WeekWeatherRequest(Parcel in) {
         current = in.readParcelable(CurrentWeather.class.getClassLoader());
-        daily = in.readParcelable(DailyWeather.class.getClassLoader());
+        daily = in.createTypedArray(DailyWeather.CREATOR);
     }
 
-    public static final Creator<CurrentWeatherRequest> CREATOR = new Creator<CurrentWeatherRequest>() {
+    public static final Creator<WeekWeatherRequest> CREATOR = new Creator<WeekWeatherRequest>() {
         @Override
-        public CurrentWeatherRequest createFromParcel(Parcel in) {
-            return new CurrentWeatherRequest(in);
+        public WeekWeatherRequest createFromParcel(Parcel in) {
+            return new WeekWeatherRequest(in);
         }
 
         @Override
-        public CurrentWeatherRequest[] newArray(int size) {
-            return new CurrentWeatherRequest[size];
+        public WeekWeatherRequest[] newArray(int size) {
+            return new WeekWeatherRequest[size];
         }
     };
+
+    @Override
+    public Weather getFirstWeather() {
+        return current.getWeather()[0];
+    }
+
+    @Override
+    public Main getMain() {
+        return null;
+    }
 
     public CurrentWeather getCurrent() {
         return current;
@@ -38,11 +50,11 @@ public class WeekWeatherRequest implements MainRequest {
         this.current = current;
     }
 
-    public DailyWeather getDaily() {
+    public DailyWeather[] getDaily() {
         return daily;
     }
 
-    public void setDaily(DailyWeather daily) {
+    public void setDaily(DailyWeather[] daily) {
         this.daily = daily;
     }
 
@@ -54,6 +66,6 @@ public class WeekWeatherRequest implements MainRequest {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeParcelable(current,0);
-        parcel.writeParcelable(daily,0);
+        parcel.writeTypedArray(daily,0);
     }
 }
