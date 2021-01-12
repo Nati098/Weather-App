@@ -25,9 +25,9 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
             title = getString(R.string.app_name);
         }
         String text = remoteMessage.getNotification().getBody();
-        // создать нотификацию
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_weather_launcher)
                 .setContentTitle(title)
                 .setContentText(text);
         NotificationManager notificationManager =

@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
@@ -78,6 +79,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     private void initGetToken() {
+//        FirebaseApp.initializeApp(this);
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
