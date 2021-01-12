@@ -30,6 +30,7 @@ import java.util.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import ru.geekbrains.weatherapplication.BaseApp;
 import ru.geekbrains.weatherapplication.BuildConfig;
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.CurrentWeatherExtraAdapter;
@@ -46,6 +47,7 @@ import ru.geekbrains.weatherapplication.data.request.WeekWeatherRequest;
 import ru.geekbrains.weatherapplication.item.CurrentWeatherExtraItem;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.item.WeatherItem;
+import ru.geekbrains.weatherapplication.room.CityEntity;
 import ru.geekbrains.weatherapplication.service.ApiService;
 import ru.geekbrains.weatherapplication.service.RetrofitClientImpl;
 
@@ -175,6 +177,12 @@ public class WeatherInfoFragment extends BaseFragment {
     }
 
     private CityListItem findCityByName(String cityName) {
+        CityEntity cityEntity = BaseApp.getInstance().getCityDao().getCityByName(cityName);
+        if (cityEntity != null) {
+            BaseApp.getInstance().getCityDao().updateTempr(cityEntity.id, 0.0);
+            return (new CityListItem()).convertFromCityEntity(cityEntity);
+        }
+
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getContext().getAssets().open(CITY_LIST_FILE_PATH)));
 
@@ -185,11 +193,30 @@ public class WeatherInfoFragment extends BaseFragment {
                     .findAny().orElse(null);
 
             reader.close();
+
+            saveToDb(res);
             return res;
         }
         catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public void saveToDb(CityListItem city) {
+        CityEntity entity = new CityEntity();
+        entity.id = city.getId();
+        entity.name = city.getName();
+        entity.state = city.getState();
+        entity.country = city.getCountry();
+        entity.lon = city.getCoord().getLon();
+        entity.lat = city.getCoord().getLat();
+        entity.tempr = 0.0;
+
+        BaseApp.getInstance().getCityDao().insertCity(entity);
+
+        if (DEBUG) {
+            Log.d(TAG, "saved city " + city.getName() + " to db");
         }
     }
 
@@ -216,6 +243,8 @@ public class WeatherInfoFragment extends BaseFragment {
                 .subscribe(new DisposableSingleObserver<WeekWeatherRequest>() {
                     @Override
                     public void onSuccess(WeekWeatherRequest weatherRequest) {
+                        BaseApp.getInstance().getCityDao().updateTempr(city.getId(), weatherRequest.getCurrent().getTemp());
+
                         updateView(weatherRequest);
                         dispose();
                     }

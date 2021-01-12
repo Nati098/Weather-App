@@ -15,6 +15,9 @@ public interface CityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCity(CityEntity city);
 
+    @Insert
+    void insertAll(CityEntity... users);
+
     @Update
     void updateCity(CityEntity city);
 
@@ -28,9 +31,15 @@ public interface CityDao {
     List<CityEntity> getAllCities();
 
     @Query("SELECT * FROM CityEntity WHERE id = :id")
-    CityEntity getStudentById(long id);
+    CityEntity getCityById(int id);
+
+    @Query("SELECT * FROM CityEntity WHERE name = :name")
+    CityEntity getCityByName(String name);
+
+    @Query("UPDATE CityEntity SET tempr = :t WHERE id = :id")
+    int updateTempr(int id, double t);
 
     @Query("DELETE FROM CityEntity WHERE id = :id")
-    void deleteCityById(long id);
+    void deleteCityById(int id);
 
 }
