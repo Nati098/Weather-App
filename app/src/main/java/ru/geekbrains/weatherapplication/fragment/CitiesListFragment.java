@@ -31,10 +31,10 @@ import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
 import ru.geekbrains.weatherapplication.data.State;
+import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
-import ru.geekbrains.weatherapplication.service.ApiDataReceiver;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
@@ -98,6 +98,9 @@ public class CitiesListFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        String cityName = (editTextCityName.getText() == null) ? "" : editTextCityName.getText().toString();
+        SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, cityName);
+
         Parcel parcel = new Parcel(editTextCityName.getText().toString(), optionsAdapter.getData());
         outState.putSerializable(WEATHER_OPTIONS, parcel);
         if (DEBUG) {
@@ -110,6 +113,7 @@ public class CitiesListFragment extends Fragment {
     private void bindView(View view) {
 
         editTextCityName = view.findViewById(R.id.city_name_edittext);
+        editTextCityName.setText(SystemPreferences.getStringPreference(SystemPreferences.LAST_REQUESTED_CITY));
         editTextCityName.setFocusable(true);
         editTextCityName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,6 +140,7 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
                         R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
+                            SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, editTextCityName.getText().toString());
                             openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
             }).show();
         });

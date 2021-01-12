@@ -3,18 +3,13 @@
     package="ru.geekbrains.weatherapplication">
 
     <application
+        android:name=".BaseApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_weather_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_weather_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppCustomLightTheme">
-
-        <service
-            android:name=".service.WebApiService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity android:name=".SettingsActivity" />
         <activity android:name=".BaseAppActivity">

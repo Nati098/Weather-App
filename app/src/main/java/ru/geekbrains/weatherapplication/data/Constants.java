@@ -1,11 +1,9 @@
 package ru.geekbrains.weatherapplication.data;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import ru.geekbrains.weatherapplication.R;
-import ru.geekbrains.weatherapplication.data.dto.CityListItem;
 import ru.geekbrains.weatherapplication.data.dto.CurrentWeather;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
@@ -14,6 +12,9 @@ public class Constants {
     public static final float ABSOLUTE_ZERO = 273.15f;
 
     public static final String CITY_LIST_FILE_PATH = "city.list.json";
+
+    public static final String GET_WEATHER_URL = "https://api.openweathermap.org/data/2.5/";
+    public static final String GET_WEEK_WEATHER_URL = "https://api.openweathermap.org/data/2.5/";
 
     public static final String WEATHER_OPTIONS = "weather_options";
 
@@ -73,7 +74,7 @@ public class Constants {
 
         switch (item.getId()) {
             case FEELSLIKE_OPTION:
-                return String.format(sb.append("%.0f ").append("°C").toString(), newData.getFeelsLike());
+                return String.format(sb.append("%.0f ").append("°C").toString(), newData.getFeelsLike()-ABSOLUTE_ZERO);
             case SUNRISE_TIME_OPTION:
                 calendar.setTimeInMillis(newData.getSunrise());
                 return formatter.format(calendar.getTime());
