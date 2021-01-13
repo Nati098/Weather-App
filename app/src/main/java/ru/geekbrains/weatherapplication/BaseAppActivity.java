@@ -108,7 +108,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         registerReceiver(lowBatteryReceiver, lowBatteryInf);
 
         noConnectionReceiver = new ConnectivityNotificationReceiver();
-        registerReceiver(lowBatteryReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registerReceiver(noConnectionReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void initNotificationChannel() {
@@ -162,9 +162,9 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(lowBatteryReceiver);
         unregisterReceiver(noConnectionReceiver);
-        super.onDestroy();
     }
 
     public static Context getContext() {
