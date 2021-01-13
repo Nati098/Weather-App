@@ -51,6 +51,9 @@
     <string name="empty_city_name_error">City name cannot be empty</string>
     <string name="cannot_load_info_error">Cannot load information</string>
 
+    <string name="title_notification">Informational notification</string>
+    <string name="low_battery_notification">Low battery!</string>
+    <string name="no_network_notification">No network connection!</string>
 
     <string name="extra_item_label" translatable="false">Extra item %d</string>
     <string name="temperature_dummy" translatable="false">7°C</string>

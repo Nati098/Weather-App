@@ -49,4 +49,8 @@
     <string name="error_title">Ошибка!</string>
     <string name="empty_city_name_error">Название города не может быть пустым</string>
     <string name="cannot_load_info_error">Не удается загрузить информацию</string>
+
+    <string name="title_notification">Информационное уведомление</string>
+    <string name="low_battery_notification">Низкиий уровень заряда батареи!</string>
+    <string name="no_network_notification">Отсутствует подключение к сети!</string>
 </resources>

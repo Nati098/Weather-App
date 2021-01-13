@@ -15,6 +15,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
@@ -31,7 +32,8 @@ import java.util.List;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
 import ru.geekbrains.weatherapplication.item.OptionItem;
-import ru.geekbrains.weatherapplication.service.CustomFirebaseMessagingService;
+import ru.geekbrains.weatherapplication.service.ConnectivityNotificationReceiver;
+import ru.geekbrains.weatherapplication.service.ServiceNotificationReceiver;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
 import static ru.geekbrains.weatherapplication.data.Constants.*;
@@ -43,6 +45,10 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     private static final int SETTINGS_CODE = 88;
 
     private static Context context;
+
+    private ServiceNotificationReceiver lowBatteryReceiver;
+    private ConnectivityNotificationReceiver noConnectionReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         bindView();
         initGetToken();
         initNotificationChannel();
+
+        initBroadcastReceivers();
 
         addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
     }
@@ -79,7 +87,6 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     private void initGetToken() {
-//        FirebaseApp.initializeApp(this);
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -92,6 +99,16 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                         Log.d(TAG, "PushMessage -> got token="+token);
                     }
                 });
+    }
+
+    private void initBroadcastReceivers() {
+        lowBatteryReceiver = new ServiceNotificationReceiver();
+        IntentFilter lowBatteryInf = new IntentFilter();
+        lowBatteryInf.addAction("android.intent.action.BATTERY_LOW");
+        registerReceiver(lowBatteryReceiver, lowBatteryInf);
+
+        noConnectionReceiver = new ConnectivityNotificationReceiver();
+        registerReceiver(lowBatteryReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void initNotificationChannel() {
@@ -141,6 +158,13 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         if (requestCode == SETTINGS_CODE) {
             recreate();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(lowBatteryReceiver);
+        unregisterReceiver(noConnectionReceiver);
+        super.onDestroy();
     }
 
     public static Context getContext() {
