@@ -6,16 +6,22 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +48,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 public class BaseAppActivity extends AppCompatActivity implements OpenFragmentListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = BaseAppActivity.class.getSimpleName();
+    private static final int GPS_SETTING_CODE = 87;
     private static final int SETTINGS_CODE = 88;
 
     private static Context context;
@@ -136,7 +143,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         int id = item.getItemId();
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+                addFragment(CitiesListFragment.newInstance(getCityByGPS(), getWeatherExtraInfo()));
             }
             else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
@@ -157,6 +164,9 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SETTINGS_CODE) {
             recreate();
+        }
+        else if (requestCode == GPS_SETTING_CODE) {
+            getCityByGPS();
         }
     }
 
@@ -241,6 +251,34 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void createAlertDialogGPSDisabled() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.gps_disabled_error))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.settings),
+                        (dialog, id) -> {
+                            Intent callGPSSettingIntent = new Intent(
+                                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(callGPSSettingIntent, GPS_SETTING_CODE);
+                        })
+                .setNegativeButton(getString(R.string.button_back), (dialog, id) -> dialog.cancel());
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private String getCityByGPS() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            LocationListener locationListener = new MyLocationListener();
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        }
+        else {
+            createAlertDialogGPSDisabled();
+        }
     }
 
 }
