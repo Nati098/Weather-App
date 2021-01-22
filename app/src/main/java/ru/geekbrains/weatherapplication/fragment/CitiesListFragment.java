@@ -13,31 +13,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
 import ru.geekbrains.weatherapplication.data.Parcel;
-import ru.geekbrains.weatherapplication.data.State;
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
-import ru.geekbrains.weatherapplication.data.dto.CityListItem;
-import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
-import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 

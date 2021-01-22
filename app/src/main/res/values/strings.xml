@@ -50,6 +50,7 @@
     <string name="error_title">Error!</string>
     <string name="empty_city_name_error">City name cannot be empty</string>
     <string name="cannot_load_info_error">Cannot load information</string>
+    <string name="gps_disabled_error">"GPS is disabled in your device. Would you like to enable it?"</string>
 
     <string name="title_notification">Informational notification</string>
     <string name="low_battery_notification">Low battery!</string>
