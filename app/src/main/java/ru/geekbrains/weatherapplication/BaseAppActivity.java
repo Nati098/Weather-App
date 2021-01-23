@@ -20,6 +20,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -28,12 +31,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import ru.geekbrains.weatherapplication.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
@@ -63,8 +69,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         context = getApplicationContext();
         if (SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE)) {
             setTheme(R.style.AppCustomDarkTheme);
-        }
-        else {
+        } else {
             setTheme(R.style.AppCustomLightTheme);
         }
         setContentView(R.layout.activity_base_app);
@@ -103,7 +108,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
                     String token = task.getResult().getToken();
                     if (DEBUG) {
-                        Log.d(TAG, "PushMessage -> got token="+token);
+                        Log.d(TAG, "PushMessage -> got token=" + token);
                     }
                 });
     }
@@ -128,11 +133,10 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
         }
         return true;
@@ -144,8 +148,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 addFragment(CitiesListFragment.newInstance(getCityByGPS(), getWeatherExtraInfo()));
-            }
-            else {
+            } else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
             }
 
@@ -164,8 +167,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SETTINGS_CODE) {
             recreate();
-        }
-        else if (requestCode == GPS_SETTING_CODE) {
+        } else if (requestCode == GPS_SETTING_CODE) {
             getCityByGPS();
         }
     }
@@ -230,13 +232,12 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         } else {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 super.onBackPressed();
-            }
-            else {
+            } else {
                 getSupportFragmentManager().popBackStack();
             }
 
             if (DEBUG) {
-                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: "+getSupportFragmentManager().getBackStackEntryCount());
+                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: " + getSupportFragmentManager().getBackStackEntryCount());
             }
         }
     }
@@ -247,7 +248,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                 .setMessage(R.string.about_description)
                 .setIcon(R.drawable.ic_about)
                 .setCancelable(true)
-                .setPositiveButton(R.string.button_ok, (dialog, id) -> {});
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> {
+                });
 
         AlertDialog alert = builder.create();
         alert.show();
@@ -270,10 +272,40 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
     private String getCityByGPS() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "No permission Manifest.permission.ACCESS_FINE_LOCATION or Manifest.permission.ACCESS_COARSE_LOCATION");
+            return "";
+        }
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            LocationListener locationListener = new MyLocationListener();
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            LocationListener locationListener = loc -> {
+                String longitude = "Longitude: " + loc.getLongitude();
+                Log.v(TAG, longitude);
+                String latitude = "Latitude: " + loc.getLatitude();
+                Log.v(TAG, latitude);
+
+                // get city name from coordinates
+                String cityName = null;
+                Geocoder gcd = new Geocoder(context, Locale.getDefault());
+
+                List<Address> addresses;
+                try {
+                    addresses = gcd.getFromLocation(loc.getLatitude(),
+                            loc.getLongitude(), 1);
+                    if (addresses.size() > 0) {
+                        System.out.println(addresses.get(0).getLocality());
+                        cityName = addresses.get(0).getLocality();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (DEBUG) {
+                    Log.d(TAG, longitude + "\n" + latitude + "\n\n Current City is: " + cityName);
+                }
+            };
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
         }
         else {
