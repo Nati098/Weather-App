@@ -147,7 +147,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         int id = item.getItemId();
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                addFragment(CitiesListFragment.newInstance(getCityByGPS(), getWeatherExtraInfo()));
+                addFragment(CitiesListFragment.newInstance(getCityByGPS(), "", getWeatherExtraInfo()));
             } else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
             }
@@ -307,9 +307,11 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
             };
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            return ???;
         }
         else {
             createAlertDialogGPSDisabled();
+            return "";
         }
     }
 

@@ -39,10 +39,11 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
 
+    <string name="current_city">Your city:</string>
     <string name="see_forecast_step1">First, choose city:</string>
     <string name="see_forecast_step2">Next, choose options you want to see:</string>
     <string name="see_forecast_step3">And push the button to see the forecast:</string>
-    <string name="see_forecast_btn">See</string>
+    <string name="see_forecast_btn">See forecast</string>
 
     <string name="settings">Settings</string>
     <string name="setting_night_mode">Night mode</string>
