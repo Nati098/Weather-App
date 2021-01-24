@@ -80,7 +80,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
         initBroadcastReceivers();
 
-        addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+        //addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+        getCityByGPS();
     }
 
     private void bindView() {
@@ -147,7 +148,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         int id = item.getItemId();
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                addFragment(CitiesListFragment.newInstance(getCityByGPS(), "", getWeatherExtraInfo()));
+                getCityByGPS();
             } else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
             }
@@ -265,16 +266,16 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                                     android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivityForResult(callGPSSettingIntent, GPS_SETTING_CODE);
                         })
-                .setNegativeButton(getString(R.string.button_back), (dialog, id) -> dialog.cancel());
+                .setNegativeButton(getString(R.string.button_back), (dialog, id) -> addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo())));
 
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private String getCityByGPS() {
+    private void getCityByGPS() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "No permission Manifest.permission.ACCESS_FINE_LOCATION or Manifest.permission.ACCESS_COARSE_LOCATION");
-            return "";
+            addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
         }
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -304,14 +305,13 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                 if (DEBUG) {
                     Log.d(TAG, longitude + "\n" + latitude + "\n\n Current City is: " + cityName);
                 }
+                addFragment(CitiesListFragment.newInstance(cityName, "", getWeatherExtraInfo()));
             };
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-            return ???;
         }
         else {
             createAlertDialogGPSDisabled();
-            return "";
         }
     }
 
