@@ -38,6 +38,7 @@
     <string name="saturday">Сб</string>
     <string name="sunday">Вс</string>
 
+    <string name="current_city">Ваш город:</string>
     <string name="see_forecast_step1">Сначала выберите город:</string>
     <string name="see_forecast_step2">Далее выберите, какую информацию отображать:</string>
     <string name="see_forecast_step3">А теперь нажмите кнопку, чтобы посмотреть прогноз:</string>
