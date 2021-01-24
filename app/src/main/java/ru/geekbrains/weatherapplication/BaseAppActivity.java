@@ -80,6 +80,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
         initBroadcastReceivers();
 
+        requestLocationPermission();
+
         //addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
         getCityByGPS();
     }
@@ -98,6 +100,15 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         NavigationView navigationView = findViewById(R.id.nav_view_baseapp);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        }, 0);
+    }
+
+
 
     private void initGetToken() {
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -276,6 +287,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "No permission Manifest.permission.ACCESS_FINE_LOCATION or Manifest.permission.ACCESS_COARSE_LOCATION");
             addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+            return;
         }
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
