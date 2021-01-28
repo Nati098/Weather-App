@@ -3,20 +3,15 @@
     package="ru.geekbrains.weatherapplication">
 
     <application
+        android:name=".BaseApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_weather_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_weather_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppCustomLightTheme">
-
-        <service
-            android:name=".service.WebApiService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
-
         <activity android:name=".SettingsActivity" />
+
         <activity android:name=".BaseAppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +19,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        <receiver android:name=".service.ServiceNotificationReceiver">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.BATTERY_LOW" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
+        <receiver android:name=".service.ConnectivityNotificationReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.CustomFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

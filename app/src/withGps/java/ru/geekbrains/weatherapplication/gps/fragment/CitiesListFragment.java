@@ -1,4 +1,4 @@
-package ru.geekbrains.weatherapplication.fragment;
+package ru.geekbrains.weatherapplication.gps.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,35 +9,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import ru.geekbrains.weatherapplication.R;
 import ru.geekbrains.weatherapplication.adapter.OptionsAdapter;
-import ru.geekbrains.weatherapplication.data.Parcel;
-import ru.geekbrains.weatherapplication.data.State;
-import ru.geekbrains.weatherapplication.data.SystemPreferences;
-import ru.geekbrains.weatherapplication.data.dto.CityListItem;
-import ru.geekbrains.weatherapplication.data.request.CurrentWeatherRequest;
+
+import ru.geekbrains.weatherapplication.fragment.WeatherInfoFragment;
+import ru.geekbrains.weatherapplication.gps.data.Parcel;
+import ru.geekbrains.weatherapplication.gps.data.SystemPreferences;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.utils.OpenFragmentListener;
 
-import static ru.geekbrains.weatherapplication.data.Constants.CITY_LIST_FILE_PATH;
 import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 
@@ -45,6 +39,9 @@ import static ru.geekbrains.weatherapplication.data.Constants.WEATHER_OPTIONS;
 public class CitiesListFragment extends Fragment {
     private static final String TAG = CitiesListFragment.class.getSimpleName();
 
+    private LinearLayout layoutCurrCity;
+    private TextView textViewCurrentCity;
+    private Button btnSeeWeatherCurrentCity;
     private TextInputEditText editTextCityName;
     private Button btnSeeWeather;
 
@@ -58,6 +55,14 @@ public class CitiesListFragment extends Fragment {
         CitiesListFragment fragment = new CitiesListFragment();
         Bundle args = new Bundle();
         args.putSerializable(WEATHER_OPTIONS, new Parcel(cityName, data));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static CitiesListFragment newInstance(String currCityName, String cityName, List<OptionItem> data) {
+        CitiesListFragment fragment = new CitiesListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(WEATHER_OPTIONS, new Parcel(currCityName, cityName, data));
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,6 +96,9 @@ public class CitiesListFragment extends Fragment {
             parcel = (Parcel) savedInstanceState.getSerializable(WEATHER_OPTIONS);
         }
 
+        layoutCurrCity.setVisibility((parcel.currCityName == null) ? View.GONE : View.VISIBLE);
+        textViewCurrentCity.setText(parcel.currCityName);
+
         editTextCityName.setText(parcel.cityName);
         setupRecycler(view, parcel.options);
 
@@ -111,7 +119,8 @@ public class CitiesListFragment extends Fragment {
 
 
     private void bindView(View view) {
-
+        layoutCurrCity = view.findViewById(R.id.layout_curr_city);
+        textViewCurrentCity = view.findViewById(R.id.text_view_curr_city);
         editTextCityName = view.findViewById(R.id.city_name_edittext);
         editTextCityName.setText(SystemPreferences.getStringPreference(SystemPreferences.LAST_REQUESTED_CITY));
         editTextCityName.setFocusable(true);
@@ -139,10 +148,16 @@ public class CitiesListFragment extends Fragment {
         btnSeeWeather.setEnabled(!editTextCityName.getText().toString().isEmpty());
         btnSeeWeather.setOnClickListener(v -> {
             Snackbar.make(view.findViewById(R.id.cities_list_fragment),
-                        R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
-                            SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, editTextCityName.getText().toString());
-                            openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
+                    R.string.show_forecast_confirm, Snackbar.LENGTH_LONG).setAction(R.string.show_forecast_yes, view1 -> {
+                SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, editTextCityName.getText().toString());
+                openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(editTextCityName.getText().toString(), optionsAdapter.getData()));
             }).show();
+        });
+
+        btnSeeWeatherCurrentCity = view.findViewById(R.id.btn_see_weather_curr_city);
+        btnSeeWeatherCurrentCity.setOnClickListener(v -> {
+            SystemPreferences.setPreference(SystemPreferences.LAST_REQUESTED_CITY, textViewCurrentCity.getText().toString());
+            openFragmentListener.replaceFragment(WeatherInfoFragment.newInstance(textViewCurrentCity.getText().toString(), optionsAdapter.getData()));
         });
 
         optionsRecycler = view.findViewById(R.id.recycler);

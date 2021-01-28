@@ -1,0 +1,4 @@
+<resources>
+    <string name="current_city">Your city:</string>
+    <string name="gps_disabled_error">"GPS is disabled in your device. Would you like to enable it?"</string>
+</resources>

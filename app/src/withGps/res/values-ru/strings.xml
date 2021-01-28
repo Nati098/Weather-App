@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="current_city">Ваш город:</string>
+    <string name="gps_disabled_error">"GPS отключен на данном устройстве. Хотите включить?"</string>
+
+</resources>

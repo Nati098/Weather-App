@@ -1,31 +1,23 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Weather implements Parcelable {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class Weather {
+
+    @SerializedName("main")
+    @Expose
     private String main;
+
+    @SerializedName("description")
+    @Expose
     private String description;
+
+    @SerializedName("icon")
+    @Expose
     private String icon;
 
-    protected Weather(Parcel in) {
-        main = in.readString();
-        description = in.readString();
-        icon = in.readString();
-    }
-
-    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
-        @Override
-        public Weather createFromParcel(Parcel in) {
-            return new Weather(in);
-        }
-
-        @Override
-        public Weather[] newArray(int size) {
-            return new Weather[size];
-        }
-    };
 
     public String getDescription() {
         return description;
@@ -51,15 +43,4 @@ public class Weather implements Parcelable {
         this.icon = icon;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(main);
-        parcel.writeString(description);
-        parcel.writeString(icon);
-    }
 }

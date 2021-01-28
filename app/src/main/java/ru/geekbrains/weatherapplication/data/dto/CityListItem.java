@@ -1,5 +1,7 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
+import ru.geekbrains.weatherapplication.room.CityEntity;
+
 public class CityListItem {
     private int id;
     private String name;
@@ -45,5 +47,22 @@ public class CityListItem {
 
     public void setCoord(Coordinates coord) {
         this.coord = coord;
+    }
+
+    public CityListItem convertFromCityEntity(CityEntity entity) {
+        CityListItem item = new CityListItem();
+
+        item.setId(entity.id);
+        item.setName(entity.name);
+        item.setCountry(entity.country);
+        item.setState(entity.state);
+
+        Coordinates coordinates = new Coordinates();
+        coordinates.setLon(entity.lon);
+        coordinates.setLat(entity.lat);
+
+        item.setCoord(coordinates);
+
+        return item;
     }
 }

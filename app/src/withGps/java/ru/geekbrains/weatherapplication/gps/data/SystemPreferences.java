@@ -1,9 +1,9 @@
-package ru.geekbrains.weatherapplication.data;
+package ru.geekbrains.weatherapplication.gps.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import ru.geekbrains.weatherapplication.BaseAppActivity;
+import ru.geekbrains.weatherapplication.gps.BaseAppActivity;
 
 
 public class SystemPreferences {
@@ -11,6 +11,7 @@ public class SystemPreferences {
 
     public static final String LAST_REQUESTED_CITY = "last_requested_city";
     public static final String IS_NIGHT_MODE = "is_night_mode";
+    public static final String CURRENT_CITY = "current_city";
 
 
     private static SharedPreferences getSP() {
@@ -33,3 +34,4 @@ public class SystemPreferences {
         getSP().edit().putBoolean(key, value).apply();
     }
 }
+

@@ -1,29 +1,21 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class DailyWeather implements Parcelable {
+import java.util.ArrayList;
 
+
+public class DailyWeather {
+
+    @SerializedName("temp")
+    @Expose
     private Temperature temp;
-    private Weather[] weather;
 
-    protected DailyWeather(Parcel in) {
-        temp = in.readParcelable(Temperature.class.getClassLoader());
-        weather = in.createTypedArray(Weather.CREATOR);
-    }
+    @SerializedName("weather")
+    @Expose
+    private ArrayList<Weather> weather;
 
-    public static final Creator<DailyWeather> CREATOR = new Creator<DailyWeather>() {
-        @Override
-        public DailyWeather createFromParcel(Parcel in) {
-            return new DailyWeather(in);
-        }
-
-        @Override
-        public DailyWeather[] newArray(int size) {
-            return new DailyWeather[size];
-        }
-    };
 
     public Temperature getTemp() {
         return temp;
@@ -33,22 +25,12 @@ public class DailyWeather implements Parcelable {
         this.temp = temp;
     }
 
-    public Weather[] getWeather() {
+    public ArrayList<Weather> getWeather() {
         return weather;
     }
 
-    public void setWeather(Weather[] weather) {
-        this.weather = weather;
+    public void setWeather(ArrayList<Weather> weather) {
+        this.weather = (ArrayList<Weather>) weather.clone();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(temp, i);
-        parcel.writeTypedArray(weather, i);
-    }
 }

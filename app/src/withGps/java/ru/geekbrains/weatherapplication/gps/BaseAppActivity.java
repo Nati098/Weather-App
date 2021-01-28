@@ -1,4 +1,4 @@
-package ru.geekbrains.weatherapplication;
+package ru.geekbrains.weatherapplication.gps;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,16 +6,23 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,11 +33,15 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
-import ru.geekbrains.weatherapplication.data.SystemPreferences;
-import ru.geekbrains.weatherapplication.fragment.CitiesListFragment;
+import ru.geekbrains.weatherapplication.R;
+import ru.geekbrains.weatherapplication.SettingsActivity;
+import ru.geekbrains.weatherapplication.gps.data.SystemPreferences;
+import ru.geekbrains.weatherapplication.gps.fragment.CitiesListFragment;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 import ru.geekbrains.weatherapplication.service.ConnectivityNotificationReceiver;
 import ru.geekbrains.weatherapplication.service.ServiceNotificationReceiver;
@@ -42,6 +53,7 @@ import static ru.geekbrains.weatherapplication.data.Constants.LoggerMode.DEBUG;
 
 public class BaseAppActivity extends AppCompatActivity implements OpenFragmentListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = BaseAppActivity.class.getSimpleName();
+    private static final int GPS_SETTING_CODE = 87;
     private static final int SETTINGS_CODE = 88;
 
     private static Context context;
@@ -56,8 +68,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         context = getApplicationContext();
         if (SystemPreferences.getBooleanPreference(SystemPreferences.IS_NIGHT_MODE)) {
             setTheme(R.style.AppCustomDarkTheme);
-        }
-        else {
+        } else {
             setTheme(R.style.AppCustomLightTheme);
         }
         setContentView(R.layout.activity_base_app);
@@ -68,7 +79,10 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
         initBroadcastReceivers();
 
-        addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+        requestLocationPermission();
+
+        //addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+        getCityByGPS();
     }
 
     private void bindView() {
@@ -86,6 +100,15 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        }, 0);
+    }
+
+
+
     private void initGetToken() {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
@@ -96,7 +119,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
                     String token = task.getResult().getToken();
                     if (DEBUG) {
-                        Log.d(TAG, "PushMessage -> got token="+token);
+                        Log.d(TAG, "PushMessage -> got token=" + token);
                     }
                 });
     }
@@ -121,11 +144,10 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
         }
         return true;
@@ -136,9 +158,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         int id = item.getItemId();
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
-            }
-            else {
+                getCityByGPS();
+            } else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
             }
 
@@ -157,6 +178,8 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SETTINGS_CODE) {
             recreate();
+        } else if (requestCode == GPS_SETTING_CODE) {
+            getCityByGPS();
         }
     }
 
@@ -220,13 +243,12 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         } else {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 super.onBackPressed();
-            }
-            else {
+            } else {
                 getSupportFragmentManager().popBackStack();
             }
 
             if (DEBUG) {
-                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: "+getSupportFragmentManager().getBackStackEntryCount());
+                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: " + getSupportFragmentManager().getBackStackEntryCount());
             }
         }
     }
@@ -237,10 +259,71 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
                 .setMessage(R.string.about_description)
                 .setIcon(R.drawable.ic_about)
                 .setCancelable(true)
-                .setPositiveButton(R.string.button_ok, (dialog, id) -> {});
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> {
+                });
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void createAlertDialogGPSDisabled() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.gps_disabled_error))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.settings),
+                        (dialog, id) -> {
+                            Intent callGPSSettingIntent = new Intent(
+                                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(callGPSSettingIntent, GPS_SETTING_CODE);
+                        })
+                .setNegativeButton(getString(R.string.button_back), (dialog, id) -> addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo())));
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void getCityByGPS() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "No permission Manifest.permission.ACCESS_FINE_LOCATION or Manifest.permission.ACCESS_COARSE_LOCATION");
+            addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
+            return;
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            LocationListener locationListener = loc -> {
+                String longitude = "Longitude: " + loc.getLongitude();
+                Log.v(TAG, longitude);
+                String latitude = "Latitude: " + loc.getLatitude();
+                Log.v(TAG, latitude);
+
+                // get city name from coordinates
+                String cityName = null;
+                Geocoder gcd = new Geocoder(context, Locale.getDefault());
+
+                List<Address> addresses;
+                try {
+                    addresses = gcd.getFromLocation(loc.getLatitude(),
+                            loc.getLongitude(), 1);
+                    if (addresses.size() > 0) {
+                        System.out.println(addresses.get(0).getLocality());
+                        cityName = addresses.get(0).getLocality();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (DEBUG) {
+                    Log.d(TAG, longitude + "\n" + latitude + "\n\n Current City is: " + cityName);
+                }
+                addFragment(CitiesListFragment.newInstance(cityName, "", getWeatherExtraInfo()));
+            };
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        }
+        else {
+            createAlertDialogGPSDisabled();
+        }
     }
 
 }

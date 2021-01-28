@@ -1,31 +1,23 @@
 package ru.geekbrains.weatherapplication.data.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class Temperature implements Parcelable {
 
+public class Temperature {
+
+    @SerializedName("day")
+    @Expose
     private double day;
+
+    @SerializedName("min")
+    @Expose
     private double min;
+
+    @SerializedName("max")
+    @Expose
     private double max;
 
-    protected Temperature(Parcel in) {
-        day = in.readDouble();
-        min = in.readDouble();
-        max = in.readDouble();
-    }
-
-    public static final Creator<Temperature> CREATOR = new Creator<Temperature>() {
-        @Override
-        public Temperature createFromParcel(Parcel in) {
-            return new Temperature(in);
-        }
-
-        @Override
-        public Temperature[] newArray(int size) {
-            return new Temperature[size];
-        }
-    };
 
     public double getDay() {
         return day;
@@ -51,15 +43,4 @@ public class Temperature implements Parcelable {
         this.max = max;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeDouble(day);
-        parcel.writeDouble(min);
-        parcel.writeDouble(max);
-    }
 }
