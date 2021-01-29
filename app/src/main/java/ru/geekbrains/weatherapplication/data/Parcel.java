@@ -6,7 +6,6 @@ import java.util.List;
 import ru.geekbrains.weatherapplication.item.OptionItem;
 
 public class Parcel implements Serializable {
-    public String currCityName;
     public String cityName;
     public List<OptionItem> options;
     public String icon;
@@ -20,11 +19,5 @@ public class Parcel implements Serializable {
         this.cityName = cityName;
         this.options = options;
         this.icon = icon;
-    }
-
-    public Parcel(String currCityName, String cityName, List<OptionItem> options) {
-        this.currCityName = currCityName;
-        this.cityName = cityName;
-        this.options = options;
     }
 }
