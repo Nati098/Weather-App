@@ -36,12 +36,12 @@ android {
     productFlavors {
         withGps {
             dimension 'version'
-            applicationIdSuffix '.ru.geekbrains.weatherapplication'
+//            applicationIdSuffix '.ru.geekbrains.weatherapplication'
             versionNameSuffix '.gps'
         }
         noGps {
             dimension 'version'
-            applicationIdSuffix '.ru.geekbrains.weatherapplication.gps'
+//            applicationIdSuffix '.ru.geekbrains.weatherapplication.gps'
             versionNameSuffix '.base'
         }
     }

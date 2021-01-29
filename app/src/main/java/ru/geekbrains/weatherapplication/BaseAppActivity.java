@@ -96,7 +96,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
 
                     String token = task.getResult().getToken();
                     if (DEBUG) {
-                        Log.d(TAG, "PushMessage -> got token="+token);
+                        Log.d(TAG, "PushMessage -> got token=" + token);
                     }
                 });
     }
@@ -121,11 +121,10 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
         }
         return true;
@@ -137,8 +136,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         if (id == R.id.nav_forecast) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 addFragment(CitiesListFragment.newInstance("", getWeatherExtraInfo()));
-            }
-            else {
+            } else {
                 startActivityForResult(new Intent(getApplicationContext(), SettingsActivity.class), SETTINGS_CODE);
             }
 
@@ -226,7 +224,7 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
             }
 
             if (DEBUG) {
-                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: "+getSupportFragmentManager().getBackStackEntryCount());
+                Log.d("BaseAppActivity", "onBackPressed -> remained in stack: " + getSupportFragmentManager().getBackStackEntryCount());
             }
         }
     }
@@ -242,5 +240,4 @@ public class BaseAppActivity extends AppCompatActivity implements OpenFragmentLi
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 }
